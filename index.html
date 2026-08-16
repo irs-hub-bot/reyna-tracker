@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reyna's Journey Tracker 🌟</title>
+<style>
+:root {
+  --peach:#FFF0E6;--peach2:#FFD9BC;
+  --sky:#E6F4FF;--sky2:#B8DCFF;
+  --mint:#E6F9F1;--mint2:#A8E6CB;
+  --lav:#F0EEFF;--lav2:#C9C1F5;
+  --sun:#FFFBE6;--sun2:#FFE57A;
+  --rose:#FFF0F3;--rose2:#FFB8C6;
+  --bg:#FFFDF9;--card:#FFFFFF;
+  --text:#2D2926;--text2:#6B5E57;--text3:#9C8D86;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.14);
+  --shadow:0 2px 14px rgba(0,0,0,0.07);
+  --r:18px;--rsm:10px;
+  --font:-apple-system,'Segoe UI',system-ui,'Helvetica Neue',Arial,sans-serif;
+  --done-bg:#F0FBF5;--done-bar:#52C98A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+body.dyslexic{font-family:'OpenDyslexic','Comic Sans MS','Comic Sans',cursive;letter-spacing:.05em;word-spacing:.15em;line-height:1.8}
+body.dyslexic .cname{line-height:1.9}
+
+.page{max-width:880px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* HEADER */
+.hdr{text-align:center;padding:1.5rem 0 1.25rem}
+.hdr .stars{font-size:30px;margin-bottom:.4rem;letter-spacing:6px}
+.hdr h1{font-size:28px;font-weight:800;line-height:1.2}
+.hdr h1 span{color:#7C3AED}
+.hdr p{font-size:14px;color:var(--text2);margin-top:6px;font-weight:600}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tbtn{font-family:var(--font);font-size:13px;font-weight:700;padding:7px 18px;border-radius:99px;border:2px solid var(--border2);background:var(--card);color:var(--text2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.tbtn:hover,.tbtn.on{background:var(--lav);border-color:var(--lav2);color:#5B21B6}
+
+/* CHEER */
+.cheer{background:linear-gradient(135deg,var(--lav),var(--mint));border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;gap:12px;align-items:flex-start;border:2px solid var(--lav2)}
+.cheer-icon{font-size:24px;flex-shrink:0}
+.cheer p{font-size:14px;color:#4C1D95;line-height:1.7;font-weight:700}
+
+/* METRICS */
+.metric-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.5rem}
+@media(max-width:750px){.metric-row{grid-template-columns:repeat(3,1fr)}}@media(max-width:480px){.metric-row{grid-template-columns:repeat(2,1fr)}}
+.metric{background:var(--card);border-radius:var(--r);padding:1rem;text-align:center;box-shadow:var(--shadow);border:2px solid transparent;transition:border-color .2s}
+.metric:hover{border-color:var(--lav2)}
+.metric-emoji{font-size:26px;margin-bottom:4px}
+.metric-label{font-size:11px;color:var(--text2);font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.metric-val{font-size:28px;font-weight:800}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:3px;font-weight:600}
+.prog-wrap{background:var(--border);border-radius:99px;height:8px;margin-top:8px;overflow:hidden}
+.prog{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.34,1.56,.64,1)}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--text2);margin-bottom:1.25rem;font-weight:700;justify-content:center}
+.legend span{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:99px;padding:5px 14px;box-shadow:var(--shadow)}
+
+/* SECTIONS */
+.section{margin-bottom:1.25rem;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;border:2px solid transparent;transition:border-color .2s}
+.section:focus-within{border-color:var(--lav2)}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;user-select:none;transition:background .15s}
+.sec-hdr:hover{background:var(--lav)}
+.sec-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:800}
+.sec-icon{font-size:22px}
+.badge{font-size:12px;padding:3px 13px;border-radius:99px;font-weight:700}
+.b-pa  {background:var(--sun); color:#92400E;border:1.5px solid var(--sun2)}
+.b-aa  {background:var(--sky); color:#1E40AF;border:1.5px solid var(--sky2)}
+.b-chem{background:var(--lav); color:#5B21B6;border:1.5px solid var(--lav2)}
+.b-phle{background:var(--mint);color:#065F46;border:1.5px solid var(--mint2)}
+.b-math{background:var(--peach);color:#92400E;border:1.5px solid var(--peach2)}
+.b-cert{background:var(--rose);color:#9D174D;border:1.5px solid var(--rose2)}
+.sec-meta{font-size:12px;color:var(--text3);font-weight:700}
+.sec-complete-badge{font-size:12px;padding:3px 12px;border-radius:99px;font-weight:800;background:var(--mint);color:#065F46;border:1.5px solid var(--mint2);display:none}
+.sec-complete-badge.show{display:inline-block}
+.chevron{font-size:20px;color:var(--text3);transition:transform .25s;display:inline-block;line-height:1}
+.collapsed .sec-body{display:none}
+.collapsed .chevron{transform:rotate(-90deg)}
+
+/* AREA LABELS */
+.area-label{padding:.45rem 1.25rem;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;background:var(--bg);border-top:1.5px solid var(--border)}
+
+/* COL HEADER + ROWS */
+.col-hdr{display:grid;grid-template-columns:52px 1fr 82px 82px 112px;gap:8px;padding:.4rem 1.25rem;background:var(--bg);font-size:11px;color:var(--text3);font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-top:1.5px solid var(--border)}
+.crow{display:grid;grid-template-columns:52px 1fr 82px 82px 112px;align-items:center;gap:8px;padding:.8rem 1.25rem;border-top:1.5px solid var(--border);transition:background .15s}
+.crow:hover{background:var(--lav)}
+.crow.done{background:var(--done-bg)}
+.crow.done .cname{color:var(--text2)}
+.crow.priority{border-left:5px solid #A78BFA}
+.crow.foundation{border-left:5px solid #FFB347}
+
+/* BIG CHECKBOX */
+.cb-wrap{display:flex;align-items:center;justify-content:center}
+.cb{appearance:none;-webkit-appearance:none;width:30px;height:30px;border-radius:9px;border:2.5px solid var(--border2);background:var(--card);cursor:pointer;transition:all .15s;position:relative;flex-shrink:0}
+.cb:hover{border-color:var(--lav2);background:var(--lav)}
+.cb:checked{background:#7C3AED;border-color:#7C3AED}
+.cb:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:17px;font-weight:900;font-family:var(--font)}
+.cb:focus{outline:3px solid var(--lav2);outline-offset:2px}
+
+.cname{font-size:14px;color:var(--text);font-weight:700;line-height:1.45}
+.ccode{font-size:11px;color:var(--text3);font-weight:700;margin-top:2px}
+.tag{font-size:10px;padding:1px 7px;border-radius:99px;margin-left:5px;font-weight:800}
+.tag-build{background:var(--sun);color:#92400E}
+.tag-req  {background:var(--lav);color:#5B21B6}
+
+.cr-in{width:74px;font-size:14px;padding:5px 8px;border-radius:var(--rsm);border:2px solid var(--border2);background:var(--bg);color:var(--text);text-align:center;font-family:var(--font);font-weight:700}
+.cr-in:focus{outline:none;border-color:#7C3AED;background:var(--lav)}
+.gr-sel{width:80px;font-size:13px;padding:5px 6px;border-radius:var(--rsm);border:2px solid var(--border2);background:var(--bg);color:var(--text);font-family:var(--font);font-weight:700}
+.gr-sel:focus{outline:none;border-color:#7C3AED}
+
+/* PILLS */
+.pill{font-size:12px;padding:4px 11px;border-radius:99px;text-align:center;white-space:nowrap;display:inline-block;font-weight:800}
+.p-done {background:var(--mint);color:#065F46;border:1.5px solid var(--mint2)}
+.p-pend {background:var(--bg);color:var(--text3);border:1.5px solid var(--border2)}
+.p-key  {background:var(--lav);color:#5B21B6;border:1.5px solid var(--lav2)}
+.p-found{background:var(--peach);color:#92400E;border:1.5px solid var(--peach2)}
+.p-xfer  {background:var(--mint);color:#065F46;border:1.5px solid var(--mint2)}
+.p-local {background:var(--sun);color:#92400E;border:1.5px solid var(--sun2)}
+.p-dev   {background:var(--peach);color:#92400E;border:1.5px solid var(--peach2)}
+.p-verify{background:var(--rose);color:#9D174D;border:1.5px solid var(--rose2)}
+.p-ip      {background:var(--lav);color:#5B21B6;border:1.5px solid var(--lav2)}
+.p-fsu-req {background:#FFF0F3;color:#9D174D;border:1.5px solid #FFB8C6}
+.p-fsu-enc {background:#E6F4FF;color:#1E40AF;border:1.5px solid #B8DCFF}
+.p-fsu-bs  {background:#F0EEFF;color:#5B21B6;border:1.5px solid #C9C1F5}
+.p-fsu-rec {background:#FFFBE6;color:#92400E;border:1.5px solid #FFE57A}
+.p-fsu-only{background:#E6F9F1;color:#065F46;border:1.5px solid #A8E6CB}
+
+/* NOTES */
+.req-note{font-size:13px;color:var(--text2);padding:.8rem 1.25rem;background:var(--bg);border-top:1.5px solid var(--border);line-height:1.7;font-weight:600}
+.notes-wrap{padding:.75rem 1.25rem;border-top:1.5px solid var(--border)}
+.notes-wrap label{font-size:11px;font-weight:800;color:var(--text3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.notes-wrap textarea{width:100%;font-size:14px;padding:8px 12px;border-radius:var(--rsm);border:2px solid var(--border2);background:var(--bg);color:var(--text);resize:vertical;font-family:var(--font);font-weight:600;line-height:1.6}
+.notes-wrap textarea:focus{outline:none;border-color:#7C3AED}
+
+/* CERT CARDS */
+.cert-card{display:flex;align-items:flex-start;gap:14px;padding:1rem 1.25rem;border-top:1.5px solid var(--border);background:var(--done-bg)}
+.cert-icon{width:46px;height:46px;border-radius:13px;background:var(--mint);border:2px solid var(--mint2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.cert-name{font-size:15px;font-weight:800;color:var(--text)}
+.cert-issuer{font-size:12px;color:var(--text2);font-weight:600;margin-top:2px}
+.cert-meta{display:flex;gap:14px;margin-top:6px;flex-wrap:wrap}
+.cert-meta span{font-size:12px;color:var(--text2);font-weight:700;display:flex;align-items:center;gap:4px}
+
+/* SAVE BAR */
+.save-bar{position:fixed;bottom:1.25rem;right:1.25rem;background:#7C3AED;color:#fff;border-radius:99px;padding:.6rem 1.25rem;font-size:14px;font-weight:800;font-family:var(--font);opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 4px 18px rgba(124,58,237,.35);display:flex;align-items:center;gap:6px}
+.save-bar.show{opacity:1}
+
+/* CONFETTI */
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+/* MATH PATHWAY — TILE GRID */
+.math-pathway{padding:1.25rem 1rem}
+.math-part-header{margin-bottom:.85rem;margin-top:.25rem}
+.math-part-label{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:5px 16px;border-radius:99px;display:inline-block}
+.mph-a{background:var(--peach);color:#92400E;border:1.5px solid var(--peach2)}
+.mph-b{background:var(--lav);color:#5B21B6;border:1.5px solid var(--lav2)}
+.math-part-sub{font-size:12px;color:var(--text3);font-weight:600;margin-top:4px}
+.math-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:.5rem}
+@media(max-width:500px){.math-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* TILE */
+.math-tile{border-radius:var(--r);padding:1rem;border:2px solid var(--border);background:var(--card);cursor:pointer;transition:all .2s;position:relative;overflow:hidden;min-height:130px;display:flex;flex-direction:column;justify-content:space-between}
+.math-tile:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.10)}
+.math-tile.mt-done{background:linear-gradient(135deg,var(--mint),#D1FAE5);border-color:var(--mint2)}
+.math-tile.mt-foundation{background:linear-gradient(135deg,var(--peach),#FEE2CC);border-color:var(--peach2)}
+.math-tile.mt-required{background:linear-gradient(135deg,var(--lav),#E9D5FF);border-color:var(--lav2)}
+.math-tile.mt-dev{background:var(--bg);border-color:var(--border);opacity:.8}
+.math-tile.mt-alt{background:linear-gradient(135deg,var(--sun),#FEF9C3);border-color:var(--sun2);border-style:dashed}
+
+/* TILE TOP ROW */
+.mt-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.mt-step{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.6}
+.mt-cb{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:7px;border:2.5px solid rgba(0,0,0,0.15);background:rgba(255,255,255,0.7);cursor:pointer;position:relative;flex-shrink:0;transition:all .15s}
+.mt-cb:checked{background:#7C3AED;border-color:#7C3AED}
+.mt-cb:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:14px;font-weight:900;font-family:var(--font)}
+.mt-cb:hover{border-color:#7C3AED;background:rgba(255,255,255,0.9)}
+.mt-cb:focus{outline:3px solid var(--lav2);outline-offset:2px}
+
+/* TILE CONTENT */
+.mt-emoji{font-size:22px;margin-bottom:.35rem;display:block}
+.mt-name{font-size:13px;font-weight:800;color:var(--text);line-height:1.3;flex:1}
+.math-tile.mt-done .mt-name{color:#065F46}
+
+/* TILE BOTTOM */
+.mt-bottom{margin-top:.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.mt-code{font-size:10px;font-weight:700;color:var(--text3)}
+.mt-cr{font-size:10px;font-weight:600;color:var(--text3)}
+.math-grade-sel{font-size:11px;padding:2px 4px;border-radius:6px;border:1.5px solid rgba(0,0,0,0.15);background:rgba(255,255,255,0.7);color:var(--text);font-family:var(--font);font-weight:700;max-width:62px}
+.math-grade-sel:focus{outline:none;border-color:#7C3AED}
+.mt-fsu-badge{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:800;white-space:nowrap}
+.mt-req-badge{background:#FFF0F3;color:#9D174D;border:1px solid #FFB8C6}
+.mt-enc-badge{background:#E6F4FF;color:#1E40AF;border:1px solid #B8DCFF}
+.mt-bs-badge {background:#F0EEFF;color:#5B21B6;border:1px solid #C9C1F5}
+
+/* PART DIVIDER */
+.math-part-divider{display:flex;align-items:center;gap:12px;margin:1.5rem 0 1.25rem;color:var(--text3);font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.math-part-divider::before,.math-part-divider::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--border),var(--lav2),var(--border));border-radius:2px}
+.math-part-divider-icon{font-size:20px}
+/* DASHBOARD */
+.dashboard{display:flex;flex-direction:column;gap:12px;margin-bottom:1.5rem}
+.dash-aa-row{width:100%}
+.dash-journeys-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:700px){.dash-journeys-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px){.dash-journeys-row{grid-template-columns:1fr 1fr}}
+.dash-aa{background:linear-gradient(135deg,#1E40AF,#3B82F6);border-radius:16px;padding:1.25rem 1.5rem;cursor:pointer;transition:all .2s;color:white;display:flex;align-items:center;gap:1.5rem;box-shadow:0 4px 20px rgba(30,64,175,.3)}
+.dash-aa:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(30,64,175,.4)}
+.dash-aa-icon{font-size:48px;flex-shrink:0}
+.dash-aa-content{flex:1}
+.dash-aa-title{font-size:17px;font-weight:900;margin-bottom:2px}
+.dash-aa-sub{font-size:12px;opacity:.85;font-weight:600;margin-bottom:10px}
+.dash-aa-bar-wrap{background:rgba(255,255,255,.25);border-radius:99px;height:14px;overflow:hidden}
+.dash-aa-bar{height:100%;border-radius:99px;background:white;transition:width .6s}
+.dash-aa-stats{display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-top:5px;opacity:.9}
+.dash-aa-feeds{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.dash-aa-feed{font-size:11px;background:rgba(255,255,255,.2);border-radius:99px;padding:3px 10px;font-weight:700;border:1px solid rgba(255,255,255,.3)}
+.dash-journey{background:var(--card);border-radius:14px;padding:1rem;border:2px solid var(--border);cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
+.dash-journey:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.dj-top{display:flex;align-items:center;justify-content:space-between}
+.dj-icon{font-size:28px}
+.dj-pct{font-size:18px;font-weight:900}
+.dj-label{font-size:12px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+.dj-steps{display:flex;gap:4px;flex-wrap:wrap;align-items:center;min-height:20px}
+.dj-dot{width:16px;height:16px;border-radius:50%;border:2px solid transparent;flex-shrink:0}
+.dj-dot.done{background:#065F46;border-color:#065F46}
+.dj-dot.inprog{background:#DBEAFE;border-color:#3B82F6}
+.dj-dot.plan{background:var(--bg);border-color:#D1D5DB}
+.dj-dot.tbd{background:#FFFBE6;border-color:#FDE68A}
+.dj-bar-wrap{background:var(--border);border-radius:99px;height:6px;overflow:hidden}
+.dj-bar{height:100%;border-radius:99px;transition:width .5s}
+.dj-status{font-size:11px;color:var(--text3);font-weight:700}
+.dash-phle{background:linear-gradient(135deg,#E6F9F1,#CCFBEF);border-color:var(--mint2)}
+.dash-elec{background:linear-gradient(135deg,#FFF7ED,#FFEDD5);border-color:#FED7AA}
+
+/* JOURNEY MAP */
+.journey-map{background:white;border-radius:16px;border:2px solid #E5E5E3;padding:1.25rem 1.5rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.journey-map-title{font-size:14px;font-weight:800;color:#2D2926;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.journey-map-title span{font-size:18px}
+.journey-tracks{display:flex;flex-direction:column;gap:10px}
+.journey-track{display:flex;align-items:center;gap:10px}
+.jt-label{font-size:12px;font-weight:800;width:90px;flex-shrink:0;color:#2D2926;text-align:right}
+.jt-bar{flex:1;display:flex;align-items:center;gap:4px;position:relative}
+.jt-step{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;border:2.5px solid transparent;transition:all .3s;position:relative;cursor:default}
+.jt-step.done{background:#065F46;border-color:#065F46;color:white}
+.jt-step.inprog{background:#DBEAFE;border-color:#3B82F6;color:#1E40AF;animation:pulse-blue 2s infinite}
+.jt-step.planned{background:white;border-color:#D1D5DB;color:#9CA3AF}
+.jt-step.tbd{background:#FFFBE6;border-color:#FDE68A;color:#92400E;border-style:dashed}
+.jt-step.fsu{background:#F0EEFF;border-color:#C9C1F5;color:#5B21B6}
+.jt-connector{flex:1;height:3px;border-radius:99px;min-width:8px;max-width:20px}
+.jt-conn-done{background:#065F46}
+.jt-conn-plan{background:#E5E7EB}
+.jt-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:.75rem;padding-top:.75rem;border-top:1px solid #F0F0EE}
+.jt-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#6B5E57}
+.jt-leg-dot{width:14px;height:14px;border-radius:50%;border:2px solid transparent;flex-shrink:0}
+@keyframes pulse-blue{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.3)}50%{box-shadow:0 0 0 5px rgba(59,130,246,0)}}
+@media(max-width:600px){.jt-label{width:60px;font-size:10px}.jt-step{width:28px;height:28px;font-size:11px}.jt-connector{max-width:10px}}
+
+/* ADVISOR FLAG */
+.adv-flag{background:var(--sky);border:2px solid var(--sky2);border-radius:var(--rsm);padding:.65rem 1rem;margin:.75rem 1.25rem 0;display:flex;align-items:flex-start;gap:10px}
+.adv-flag-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.adv-flag-body{flex:1}
+.adv-flag-title{font-size:13px;font-weight:800;color:#1E40AF;margin-bottom:3px}
+.adv-flag-msg{font-size:12px;color:#1E40AF;line-height:1.5;font-weight:600}
+.adv-flag-check{display:flex;align-items:center;gap:8px;margin-top:8px}
+.adv-flag-cb{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--sky2);background:var(--card);cursor:pointer;position:relative;flex-shrink:0;transition:all .15s}
+.adv-flag-cb:checked{background:#1E40AF;border-color:#1E40AF}
+.adv-flag-cb:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:13px;font-weight:900;font-family:var(--font)}
+.adv-flag-cb:hover{border-color:#93C5FD}
+.adv-flag-label{font-size:12px;font-weight:700;color:#1E40AF;cursor:pointer}
+.adv-flag.resolved{background:var(--mint);border-color:var(--mint2)}
+.adv-flag.resolved .adv-flag-title,.adv-flag.resolved .adv-flag-msg,.adv-flag.resolved .adv-flag-label{color:#065F46}
+.adv-flag.resolved .adv-flag-cb{border-color:var(--mint2)}
+.adv-flag.resolved .adv-flag-cb:checked{background:#52C98A;border-color:#52C98A}
+/* 30-CREDIT FLAG */
+.credit-flag{display:none;margin:.75rem 1.25rem 0;background:var(--rose);border:2px solid var(--rose2);border-radius:var(--r);padding:.75rem 1rem;align-items:flex-start;gap:10px}
+.credit-flag.show{display:flex}
+.credit-flag p{font-size:13px;color:#9D174D;font-weight:700;line-height:1.6}
+.credit-flag-icon{font-size:22px;flex-shrink:0}
+
+/* SCIENCE PATHWAY */
+.sci-pathway{padding:1.25rem 1rem}
+.sci-part-header{margin-bottom:.85rem;margin-top:.25rem}
+.sci-part-label{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:5px 16px;border-radius:99px;display:inline-block}
+.sph-a{background:var(--mint);color:#065F46;border:1.5px solid var(--mint2)}
+.sph-b{background:var(--lav);color:#5B21B6;border:1.5px solid var(--lav2)}
+.sci-part-sub{font-size:12px;color:var(--text3);font-weight:600;margin-top:4px}
+.sci-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:.5rem}
+@media(max-width:500px){.sci-grid{grid-template-columns:repeat(2,1fr)}}
+.sci-tile{border-radius:var(--r);padding:1rem;border:2px solid var(--border);background:var(--card);cursor:pointer;transition:all .2s;position:relative;overflow:hidden;min-height:130px;display:flex;flex-direction:column;justify-content:space-between}
+.sci-tile:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.10)}
+.sci-tile.st-done{background:linear-gradient(135deg,var(--mint),#D1FAE5);border-color:var(--mint2)}
+.sci-tile.st-ap{background:linear-gradient(135deg,#FFF0F3,#FFE4E6);border-color:#FFB8C6}
+.sci-tile.st-bio{background:linear-gradient(135deg,#E6F9F1,#CCFBEF);border-color:var(--mint2)}
+.sci-tile.st-chem{background:linear-gradient(135deg,var(--sky),#DBEAFE);border-color:var(--sky2)}
+.sci-tile.st-fsu{background:linear-gradient(135deg,var(--lav),#E9D5FF);border-color:var(--lav2)}
+.sci-tile.st-dev{background:var(--bg);border-color:var(--border);opacity:.85}
+.st-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.5rem}
+.st-step{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.6}
+.st-cb{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:7px;border:2.5px solid rgba(0,0,0,0.15);background:rgba(255,255,255,0.7);cursor:pointer;position:relative;flex-shrink:0;transition:all .15s}
+.st-cb:checked{background:#1D9E75;border-color:#1D9E75}
+.st-cb:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:14px;font-weight:900;font-family:var(--font)}
+.st-cb:hover{border-color:#1D9E75;background:rgba(255,255,255,0.9)}
+.st-cb:focus{outline:3px solid var(--mint2);outline-offset:2px}
+.st-emoji{font-size:22px;margin-bottom:.35rem;display:block}
+.st-name{font-size:13px;font-weight:800;color:var(--text);line-height:1.3;flex:1}
+.sci-tile.st-done .st-name{color:#065F46}
+.st-bottom{margin-top:.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.st-code{font-size:10px;font-weight:700;color:var(--text3)}
+.sci-grade-sel{font-size:11px;padding:2px 4px;border-radius:6px;border:1.5px solid rgba(0,0,0,0.15);background:rgba(255,255,255,0.7);color:var(--text);font-family:var(--font);font-weight:700;max-width:62px}
+.sci-grade-sel:focus{outline:none;border-color:#1D9E75}
+.sci-part-divider{display:flex;align-items:center;gap:12px;margin:1.5rem 0 1.25rem;color:var(--text3);font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.sci-part-divider::before,.sci-part-divider::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--border),var(--mint2),var(--border));border-radius:2px}
+.sci-part-divider-icon{font-size:20px}
+.st-phle-note{font-size:10px;font-weight:700;color:#9D174D;background:#FFF0F3;padding:2px 7px;border-radius:99px;margin-top:4px;display:inline-block;border:1px solid #FFB8C6}
+.st-fsu-badge{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:800;white-space:nowrap;background:#F0EEFF;color:#5B21B6;border:1px solid #C9C1F5}
+
+/* ART JOURNEY */
+.art-pathway{padding:1.25rem 1rem}
+.art-part-header{margin-bottom:.85rem;margin-top:.25rem}
+.art-part-label{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:5px 16px;border-radius:99px;display:inline-block}
+.aph-cfk{background:#FFF0F3;color:#9D174D;border:1.5px solid #FFB8C6}
+.aph-fsu{background:var(--lav);color:#5B21B6;border:1.5px solid var(--lav2)}
+.art-part-sub{font-size:12px;color:var(--text3);font-weight:600;margin-top:4px}
+.art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:.5rem}
+@media(max-width:500px){.art-grid{grid-template-columns:repeat(2,1fr)}}
+.art-tile{border-radius:var(--r);padding:1rem;border:2px solid var(--border);background:var(--card);cursor:pointer;transition:all .2s;min-height:130px;display:flex;flex-direction:column;justify-content:space-between}
+.art-tile:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.10)}
+.art-tile.at-done{background:linear-gradient(135deg,#D1FAE5,#A7F3D0);border-color:var(--mint2)}
+.art-tile.at-build{background:linear-gradient(135deg,#FFF0F3,#FFE4E6);border-color:#FFB8C6;opacity:.85}
+.art-tile.at-cfk{background:linear-gradient(135deg,#FFF0F3,#FFD6DF);border-color:#FFB8C6}
+.art-tile.at-fsu{background:linear-gradient(135deg,var(--lav),#E9D5FF);border-color:var(--lav2)}
+.at-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.5rem}
+.at-step{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.6}
+.at-cb{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:7px;border:2.5px solid rgba(0,0,0,0.15);background:rgba(255,255,255,0.7);cursor:pointer;position:relative;flex-shrink:0;transition:all .15s}
+.at-cb:checked{background:#9D174D;border-color:#9D174D}
+.at-cb:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:14px;font-weight:900;font-family:var(--font)}
+.at-cb:hover{border-color:#9D174D}
+.at-emoji{font-size:22px;margin-bottom:.35rem;display:block}
+.at-name{font-size:13px;font-weight:800;color:var(--text);line-height:1.3;flex:1}
+.art-tile.at-done .at-name{color:#065F46}
+.at-bottom{margin-top:.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.at-code{font-size:10px;font-weight:700;color:var(--text3)}
+.art-grade-sel{font-size:11px;padding:2px 4px;border-radius:6px;border:1.5px solid rgba(0,0,0,0.15);background:rgba(255,255,255,0.7);color:var(--text);font-family:var(--font);font-weight:700;max-width:62px}
+.art-grade-sel:focus{outline:none;border-color:#9D174D}
+.at-build-note{font-size:10px;font-weight:700;color:#9D174D;background:#FFF0F3;padding:2px 7px;border-radius:99px;margin-top:4px;display:inline-block;border:1px solid #FFB8C6}
+.art-part-divider{display:flex;align-items:center;gap:12px;margin:1.5rem 0 1.25rem;color:var(--text3);font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.art-part-divider::before,.art-part-divider::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--border),#FFB8C6,var(--border));border-radius:2px}
+.art-part-divider-icon{font-size:20px}
+
+/* FSU COLLAPSE */
+.inst-collapse-btn{font-family:var(--font);font-size:12px;font-weight:800;padding:4px 14px;border-radius:99px;border:2px solid var(--lav2);background:var(--lav);color:#5B21B6;cursor:pointer;transition:all .15s;white-space:nowrap;margin-left:auto}
+.inst-collapse-btn:hover{background:#7C3AED;color:#fff;border-color:#7C3AED}
+.fsu-collapsible.fsu-hidden{display:none}
+.tx-collapsible.tx-hidden{display:none}
+.pa-collapsible.pa-hidden{display:none}
+
+/* MOBILE */
+@media(max-width:600px){
+  .col-hdr,.crow{grid-template-columns:44px 1fr 90px}
+  .col-hdr span:nth-child(4),.col-hdr span:nth-child(5),
+  .crow .gr-sel,.crow .pill{display:none}
+  .cr-in{width:62px}
+}
+</style>
+</head>
+<body>
+<canvas id="cc"></canvas>
+<div class="page">
+
+  <div class="hdr">
+    <div class="stars" aria-hidden="true">🌟 🎓 🌟</div>
+    <h1>Reyna's <span>Journey</span> Tracker</h1>
+    <p>CFK Project ACCESS &nbsp;→&nbsp; CFK AA Degree &nbsp;→&nbsp; FSU Chemical Engineering BS &nbsp;·&nbsp; Every step forward is a win 💜</p>
+  </div>
+
+  <div class="toolbar">
+    <button class="tbtn on" id="font-btn" onclick="toggleFont()">
+      Aa  Dyslexia-friendly font
+    </button>
+    <button class="tbtn" onclick="collapseAll()">
+      ▲ Collapse all
+    </button>
+    <button class="tbtn" onclick="expandAll()">
+      ▼ Expand all
+    </button>
+  </div>
+
+  <div class="cheer">
+    <div class="cheer-icon" aria-hidden="true">💜</div>
+    <p id="cheer-msg">20 credits earned. A 3.85 GPA. Two certifications. A ceramics artist. A writer. A future Chemical Engineer. Reyna, you are already on your way! This is not a race — the goal is to finish strong, earn every grade with confidence, and take each step at your own pace. Your dream is waiting, and it is not going anywhere. 💜🌟</p>
+  </div>
+
+  <div class="dashboard" id="metrics"></div>
+
+
+  <div class="legend">
+    <span><span style="display:inline-block;width:5px;height:16px;background:#A78BFA;border-radius:3px"></span>Transfer must-do</span>
+    <span><span style="display:inline-block;width:5px;height:16px;background:#FFB347;border-radius:3px"></span>Building block</span>
+    <span><span class="pill p-xfer" style="font-size:10px">✓ Transfers</span> Transfers to SUS</span>
+    <span><span class="pill p-local" style="font-size:10px">CFK only</span> Institutional only</span>
+    <span><span class="pill p-verify" style="font-size:10px">⚠ Verify</span> Confirm with advisor</span>
+    <span><span class="pill p-dev" style="font-size:10px">Non-credit</span> Developmental</span>
+    <span><span class="pill p-fsu-req" style="font-size:10px">⭐ Required to enroll</span> Must complete to enter FSU ChemE</span>
+    <span><span class="pill p-fsu-enc" style="font-size:10px">★ Strongly encouraged</span> FSU wants before transfer</span>
+    <span><span class="pill p-fsu-bs" style="font-size:10px">Needed for BS</span> Required for bachelor's degree</span>
+    <span><span class="pill p-fsu-only" style="font-size:10px">🏛 FSU only</span> Must be taken at FSU</span>
+    <span><span class="pill p-done">✓ Done!</span></span>
+  </div>
+
+  <div id="inst-pa"></div>
+  <div id="inst-cfk"></div>
+  <div id="inst-fsu"></div>
+</div>
+
+<div class="save-bar" id="savebar">✓ Progress saved! 🎉</div>
+
+<script>
+const SK='reyna_v4';
+
+/* ── font toggle ── */
+if(localStorage.getItem('reyna_font')==='dyslexic') document.body.classList.add('dyslexic');
+function toggleFont(){
+  document.body.classList.toggle('dyslexic');
+  localStorage.setItem('reyna_font',document.body.classList.contains('dyslexic')?'dyslexic':'normal');
+}
+
+function collapseAll(){document.querySelectorAll('.section').forEach(s=>s.classList.add('collapsed'))}
+function expandAll(){document.querySelectorAll('.section').forEach(s=>s.classList.remove('collapsed'))}
+
+/* ── confetti ── */
+const cv=document.getElementById('cc'),cx=cv.getContext('2d');
+let pts=[];
+function boom(){
+  cv.width=innerWidth;cv.height=innerHeight;
+  const cols=['#7C3AED','#52C98A','#FFB347','#F472B6','#38BDF8','#FBBF24'];
+  for(let i=0;i<100;i++) pts.push({x:Math.random()*cv.width,y:-10,r:Math.random()*7+3,
+    c:cols[Math.floor(Math.random()*cols.length)],vx:(Math.random()-.5)*4,
+    vy:Math.random()*3+2,a:1,rot:Math.random()*360});
+  animCC();
+}
+function animCC(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  pts=pts.filter(p=>p.a>.04);
+  pts.forEach(p=>{cx.save();cx.globalAlpha=p.a;cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);
+    cx.fillStyle=p.c;cx.fillRect(-p.r/2,-p.r/2,p.r,p.r);cx.restore();
+    p.x+=p.vx;p.y+=p.vy;p.vy+=.09;p.a-=.013;p.rot+=3;});
+  if(pts.length) requestAnimationFrame(animCC);
+  else cx.clearRect(0,0,cv.width,cv.height);
+}
+
+/* ── cheer rotation ── */
+const msgs=[
+  "20 credits earned and a 3.85 GPA — Reyna, you are absolutely crushing it! 🌟 Keep going!",
+  "20 credits earned, certifications in hand, and a 3.85 GPA. You are doing this! 💜",
+  "Biochemical Engineer in the making! 🧬 Every A you've earned proves you belong there.",
+  "From Project ACCESS to university engineering — what an incredible journey you are on! 🚀",
+  "One step at a time. One day at a time. Look how far you've already come! 💜",
+  "A 3.85 GPA speaks for itself — you are capable, determined, and amazing. Never doubt it! 🏅",
+  "This is not a race. The goal is to finish strong — take your time, earn your grade, and own every step. 🐢💜",
+  "Slow and steady wins the degree. A strong grade now means a stronger future. There is no rush! 🌟",
+  "Every course you pass with confidence is worth more than rushing ahead. Quality over speed, always. 💪",
+  "Your path is your own. Take the time you need, trust the process, and know that steady progress is still progress! 🌈",
+  "Rest when you need to. Ask for help when you need to. This journey is yours to take at your own pace. 💜",
+  "Two certifications. A perfect GPA. Real clinical skills. You have already proven what you are made of. 🏅",
+  "Finishing is the goal — and you are going to finish. One course, one semester, one step at a time. 🚀",
+  "The best engineers are not the fastest students. They are the most determined ones. That is you, Reyna! 🧬",
+  "You don't have to do everything at once. Focus on today's step and trust that tomorrow's will follow. 💜",
+];
+let ci=0;
+setInterval(()=>{ci=(ci+1)%msgs.length;document.getElementById('cheer-msg').textContent=msgs[ci];},9000);
+
+/* ── DATA ── */
+// Art Journey — toward FSU Studio Art Minor (12 credits)
+const artSeq=[
+  {id:'ar0',code:'REC 0190',name:'Ceramics — Wheel Throwing',credits:0,artBuild:true,done2526:true,stepLabel:'Building Block ✓',semester:'Spring 2026',note:'Community Instruction — non-credit'},
+  {id:'ar1',code:'REC 0183',name:'Ceramics — Hand Building',credits:0,artBuild:true,done2526:true,stepLabel:'Building Block ✓',semester:'Summer 2026',note:'Community Instruction — non-credit'},
+  {id:'ar2',code:'ART 1300C',name:'Beginning Drawing',credits:3,stepLabel:'Step 1 of 4',semester:'Summer 2027',fsu:'minor'},
+  {id:'ar3',code:'ART 1750C',name:'Ceramics I — Hand Building, Firing and Glazing',credits:3,stepLabel:'Step 2 of 4',semester:'Fall 2027',fsuNote:'Lab fee $75',fsu:'minor'},
+  {id:'ar4',code:'ART 1754C',name:'Ceramics II',credits:3,stepLabel:'Step 3 of 4',semester:'Spring 2028',fsuNote:'Prereq: ART 1750C — Lab fee $120',fsu:'minor'},
+  {id:'ar5',code:'ART 2752C',name:'Wheel Throwing I',credits:3,stepLabel:'Step 4 of 4',semester:'Summer 2028',fsuNote:'Prereq: ART 1750C — Lab fee $85',fsu:'minor'},
+  {id:'ar6',code:'ART 3xxx+',name:'Upper-level Studio Art elective at FSU (if needed)',credits:3,artFSU:true,stepLabel:'FSU — if needed',semester:'TBD — at FSU',fsuNote:'Only needed if CFK credits do not fully satisfy the 12-credit minor requirement'},
+];
+
+// Science Part A — complete at CFK
+const sciSeqA=[
+  {id:'s1',code:'BSC 1085',name:'Anatomy & Physiology I',credits:3,type:'ap',phle:true,semester:'Fall 2026',stepLabel:'Step 1 of 7'},
+  {id:'s2',code:'BSC 1086',name:'Anatomy & Physiology II',credits:3,type:'ap',phle:true,semester:'Spring 2027',stepLabel:'Step 2 of 7'},
+  {id:'s3',code:'BSC 1010',name:'Principles of Biology I',credits:3,type:'bio',semester:'Summer 2027',stepLabel:'Step 3 of 7'},
+  {id:'s5',code:'CHM 1045',name:'General Chemistry I with Lab',credits:3,type:'chem',semester:'Fall 2027',stepLabel:'Step 4 of 7',fsu:'encouraged'},
+  {id:'s6',code:'CHM 1046',name:'General Chemistry II with Lab',credits:3,type:'chem',semester:'Summer 2028',stepLabel:'Step 5 of 7',fsu:'encouraged'},
+  {id:'s4',code:'BSC 1011',name:'Principles of Biology II',credits:3,type:'bio',semester:'Fall 2028',stepLabel:'Step 6 of 7'},
+  {id:'s7',code:'BSC 2010',name:'Biological Science I',credits:3,type:'bio',semester:'Summer 2028',stepLabel:'Step 7 of 7',fsu:'recommended'},
+];
+const sciSeqB=[
+  {id:'s8',code:'PHY 2048C',name:'General Physics A with Lab',credits:5,type:'fsu',semester:'FSU Year 1',stepLabel:'Step 1 of 4 ★',fsu:'bsdegree'},
+  {id:'s9',code:'PHY 2049C',name:'General Physics B with Lab',credits:5,type:'fsu',semester:'FSU Year 1',stepLabel:'Step 2 of 4 ★',fsu:'bsdegree'},
+  {id:'s10',code:'CHM 2210',name:'Organic Chemistry I',credits:3,type:'fsu',semester:'FSU Year 2',stepLabel:'Step 3 of 4 ★',fsu:'bsdegree'},
+  {id:'s11',code:'CHM 2211',name:'Organic Chemistry II',credits:3,type:'fsu',semester:'FSU Year 2',stepLabel:'Step 4 of 4 ★',fsu:'bsdegree'},
+];
+
+// Math Part A — complete at CFK (foundational through Calculus II)
+const mathSeqA=[
+  {id:'m2',code:'MAT 1033',name:'Intermediate Algebra',credits:4,found:true,stepLabel:'Step 1 of 5',semester:'Fall 2026',xfer:'verify'},
+  {id:'m3',code:'MAC 1105',name:'College Algebra',credits:3,found:true,stepLabel:'Step 2 of 5',semester:'Spring 2027',xfer:'yes'},
+  {id:'m5',code:'MAC 1147',name:'Pre-Calculus / Trigonometry',credits:4,found:true,stepLabel:'Step 3 of 5',semester:'Fall 2027',xfer:'yes'},
+  {id:'m6',code:'MAC 2311',name:'Calculus I — MAC 2311',credits:4,req:true,priority:true,stepLabel:'Step 4 of 5 ★',semester:'Spring 2028',xfer:'yes',fsu:'required',fsuNote:'⭐ C- or better required — must complete to enroll at FSU ChemE'},
+  {id:'m7',code:'MAC 2312',name:'Calculus II — MAC 2312',credits:4,req:true,priority:true,stepLabel:'Step 5 of 5 ★',semester:'Fall 2028',xfer:'yes',fsu:'encouraged',fsuNote:'★ Strongly encouraged before transfer — required for BS degree'},
+];
+// Math Part B — complete at FSU (upper-level math for BS degree)
+const mathSeqB=[
+  {id:'m8',code:'MAC 2313',name:'Calculus III — MAC 2313',credits:4,req:true,priority:true,stepLabel:'Step 1 of 2 ★',xfer:'yes',fsu:'bsdegree',fsuNote:'Required for BS degree — taken at FSU',semester:'Spring 2029'},
+  {id:'m9',code:'MAP 2302',name:'Differential Equations — MAP 2302',credits:3,req:true,priority:true,stepLabel:'Step 2 of 2 ★',xfer:'yes',fsu:'bsdegree',fsuNote:'Required for BS degree — FSU only accepts MAP 2302 or MAP 2305',semester:'Fall 2029'},
+];
+// Combined for legacy references
+const mathSeq=[...mathSeqA,...mathSeqB];
+
+const programs=[
+  {id:'pa',label:'Project ACCESS',badge:'b-pa',badgeText:'Year 1–2',icon:'⭐',
+   note:'Your STAR plan is all about YOU — your strengths, your goals, your pace. Focus on building confidence and independence. Every step counts and you are right on track.',
+   areas:[
+    {areaLabel:'Year 1 — Foundation Courses',courses:[
+      {id:'pa1',code:'SLS 1106',name:'First-Time in College Experience',credits:2,req:true},
+      {id:'pa2',code:'CGS 1100',name:'Learning with Technology',credits:3,req:true},
+      {id:'pa3',code:'CAR 1000',name:'Career Exploration',credits:null},
+      {id:'pa4',code:'IIL 1000',name:'Introduction to Information Literacy',credits:null},
+      {id:'pa5',code:'EFL 1000',name:'Effective Living',credits:null},
+    ]},
+    {areaLabel:'Year 2 — Certificate Electives',courses:[
+      {id:'pa6',code:'REA 0007',name:'Developmental Reading I',credits:3,devEd:true,done2526:true,xfer:'dev',fsuNote:'3 credit hours on transcript — 0.00 quality points (does not count toward GPA or AA 60-credit total)'},
+      {id:'pa7',code:'SLS 2950',name:'Professional Portfolio',credits:2},
+    ]}
+  ]},
+  {id:'art',label:'Art Journey 🎨',badge:'b-cert',badgeText:'4 steps + FSU',icon:'🎨',isArtJourney:true,
+   note:"Reyna's art journey started long before college — her ceramics work in 2026 is the foundation. The 4 selected CFK courses transfer to FSU under Florida's SCNS and satisfy the 12-credit Studio Art Minor requirement. Building blocks shown at the top honor where this journey really began! 🏺",
+   areas:[{courses:artSeq}]},
+  {id:'sci',label:'Science Journey',badge:'b-phle',badgeText:'7+4 steps',icon:'🔬',isSci:true,
+   note:'Your Science Journey runs alongside your math path — biology first to build the foundation, then chemistry to unlock your engineering transfer. The A&P courses also support your Phlebotomy Technician Certificate. Part B continues at FSU with Physics and Organic Chemistry.',
+   areas:[{courses:[...sciSeqA,...sciSeqB]}]},
+  {id:'write',label:'Writing & English Journey',badge:'b-aa',badgeText:'5 steps',icon:'✍️',isWrite:true,
+   note:"Your Writing Journey runs alongside your math path — starting with Developmental Writing (already completed!) then moving into college-level composition. Strong writing is a superpower in engineering. ENC 1101 and ENC 1102 satisfy your AA Area I requirement.",
+   areas:[{areaLabel:'Your complete writing and reading pathway',courses:[
+    {id:'w0',code:'ENC 0015',name:'Developmental Writing I',credits:3,devEd:true,done2526:true,stepLabel:'Done ✓ Spring 2026',xfer:'dev',semester:'Spring 2026',fsuNote:'3 credit hours on transcript — 0.00 quality points (does not count toward GPA or AA 60-credit total)'},
+    {id:'pa6r',code:'REA 0007',name:'Developmental Reading I',credits:3,devEd:true,done2526:true,stepLabel:'Done ✓ Spring 2026',xfer:'dev',semester:'Spring 2026',fsuNote:'3 credit hours on transcript — 0.00 quality points (does not count toward GPA or AA 60-credit total)'},
+    {id:'w2',code:'ENC 1101',name:'English Composition I',credits:3,req:true,xfer:'yes',stepLabel:'Step 1 of 3 ★',semester:'Fall 2026',fsuNote:'Required for AA Area I — C or higher required'},
+    {id:'w3',code:'ENC 1102',name:'English Composition II',credits:3,req:true,xfer:'yes',stepLabel:'Step 2 of 3 ★',semester:'Spring 2027',fsuNote:'Required for AA Area I — C or higher required'},
+    {id:'w4',code:'CRW 2100',name:'Beginning Fiction Writing',credits:3,xfer:'yes',stepLabel:'Step 3 of 3',semester:'Fall 2028',fsuNote:'Satisfies AA Area II Humanities requirement'},
+   ]}]},
+  {id:'math',label:'Math Journey',badge:'b-math',badgeText:'5+2 steps',icon:'🔢',isMath:true,
+   note:'This is your math path from the very beginning all the way to Calculus. Go one step at a time — there is absolutely no rush. Each course you finish unlocks the next one. You already completed Developmental Writing this year — that same determination will carry you all the way through! 🌟',
+   areas:[{areaLabel:'Your complete math pathway — one step at a time',courses:mathSeq}]},
+  {id:'aa',label:'AA Degree',badge:'b-aa',badgeText:'60 credits',icon:'🎓',
+   note:'Your AA degree is your passport to a Florida state university. Complete the courses below, and remember — your math and science courses from your Math Journey count toward this degree too! Ask your advisor each semester which courses to take next.',advFlag:'adv-sls',
+   areas:[
+    {areaLabel:'Area I — Writing (6 credits, grade C or higher)',courses:[
+      {id:'aa1',code:'ENC 1101',name:'English Composition I',credits:3,req:true,xfer:'yes',semester:'Fall 2026'},
+      {id:'aa2',code:'ENC 1102',name:'English Composition II',credits:3,req:true,xfer:'yes',semester:'Spring 2027'},
+    ]},
+    {areaLabel:'Area II — Humanities (6 credits)',advFlag:'adv-ii',courses:[
+      {id:'aa4',code:'ARH 1000',name:'Art Appreciation',credits:3,xfer:'yes',semester:'Spring 2027'},
+      {id:'aa6',code:'CRW 2100',name:'Beginning Fiction Writing — tracked in Writing Journey',credits:3,xfer:'yes',semester:'Fall 2028'},
+    ]},
+    {areaLabel:'Area III — Math (filled by your Math Journey above)',courses:[
+      {id:'aa3m',code:'See Math Journey',name:'College Algebra — MAC 1105 counts here (Step 2)',credits:3,xfer:'yes'},
+      {id:'aa3m2',code:'See Math Journey',name:'Calculus I counts here too',credits:4,xfer:'yes'},
+    ]},
+    {areaLabel:'Area IV — Science (6 credits) — Chemistry I & II unlock your engineering transfer! ★',courses:[
+      {id:'aa10',code:'CHM 1045',name:'General Chemistry I with Lab — CHM 1045/L',credits:3,req:true,priority:true,xfer:'yes',fsu:'encouraged',fsuNote:'★ Strongly encouraged before transfer — required for BS degree',semester:'Fall 2027'},
+      {id:'aa11',code:'CHM 2046',name:'General Chemistry II with Lab — CHM 1046/L',credits:3,req:true,priority:true,xfer:'yes',fsu:'encouraged',fsuNote:'★ Strongly encouraged before transfer — required for BS degree'},
+    ]},
+    {areaLabel:'Area V — Social Studies (6 credits) — POS 1041 satisfies Civic Literacy exam!',courses:[
+      {id:'aa15',code:'POS 1041',name:'National Government ✓ Satisfies Civic Literacy',credits:3,xfer:'yes',semester:'Summer 2027'},
+      {id:'aa17',code:'DEP 2004',name:'Human Growth & Development',credits:3,xfer:'yes',semester:'Spring 2028'},
+    ]},
+    {areaLabel:'Area VI — Extra General Education (6 credits)',advFlag:'adv-vi',courses:[
+      {id:'aa18',code:'SLS 2930',name:'Career Seminar (Summer 2026 — in progress)',credits:3,xfer:'local'},
+      {id:'aa12',code:'AST 1002',name:'Astronomy — AST 1002 (Summer 2026)',credits:3,xfer:'yes',fsu:'none',fsuNote:'Counts toward AA Area VI as a General Education elective'},
+    ]},
+    {areaLabel:'Area VII — Electives (18–19 credits)',courses:[
+      {id:'aa31',code:'BSC 1085',name:'Anatomy & Physiology I',credits:3,xfer:'yes',note:'🩸 Also supports the Phlebotomy Certificate',semester:'Fall 2026'},
+      {id:'aa31L',code:'BSC 1085L',name:'Anatomy & Physiology I Lab — must enroll with BSC 1085',credits:1,xfer:'yes',note:'🩸 Co-requisite with BSC 1085',semester:'Fall 2026'},
+      {id:'aa13',code:'BSC 1086',name:'Anatomy & Physiology II',credits:3,xfer:'yes',note:'🩸 Also supports the Phlebotomy Certificate',semester:'Spring 2027'},
+      {id:'aa33',code:'BSC 1010',name:'Principles of Biology I',credits:3,xfer:'yes',fsuNote:'Take before BSC 1011 — prerequisite required',semester:'Summer 2027'},
+      {id:'aa34',code:'BSC 1011',name:'Principles of Biology II',credits:3,xfer:'yes',fsuNote:'Requires BSC 1010 as prerequisite'},
+      {id:'aa25',code:'BSC 2010',name:'Biological Science I',credits:3,xfer:'yes',fsu:'recommended',fsuNote:'FSU ChemE recommends completing before transfer — required for BS degree'},
+      {id:'aa22',code:'MAC 2312',name:'Calculus II — tracked in Math Journey Part A (Step 8)',credits:0,xfer:'yes',fsu:'encouraged',fsuNote:'★ Strongly encouraged before transfer — see Math Journey for tracking'},
+    ]},
+    {areaLabel:'Area VIII — Computer Skills (3 credits)',courses:[
+      {id:'aa27',code:'CGS 1100',name:'Introduction to Computer Applications',credits:3,req:true,xfer:'yes'},
+    ]},
+    {areaLabel:'Area IX — College Success (2–3 credits)',advFlag:'adv-ix',courses:[
+      {id:'aa28',code:'SLS 1102',name:'College Experience — verify with advisor if this satisfies Area IX requirement',credits:2,xfer:'local',done2526:true},
+
+    ]},
+  ]},
+  {id:'certs',label:'My Certifications 🏅',badge:'b-cert',badgeText:'2025–2026',icon:'🏅',isCerts:true,
+   note:'These certifications are YOURS, Reyna — you earned every single one. They show the world that you are serious, capable, and ready. Be proud of what you have already accomplished! 🌟',
+   areas:[{areaLabel:'Your earned credentials',courses:[
+    {id:'rec1',code:'REC 0190',name:'Beginning Ceramics — Wheel Throwing (Community Instruction)',credits:0,clockHours:1.2,isCert:true,issued:'05/04/2026',expires:'No expiration',note:'🎨 Non-credit community instruction — supports Studio Art Minor application'},
+    {id:'rec2',code:'REC 0183',name:'Beginning Ceramics — Hand Building (Community Instruction)',credits:0,clockHours:1.2,isCert:true,issued:'08/01/2026',expires:'No expiration',note:'🎨 Non-credit community instruction — supports Studio Art Minor application'},
+    {id:'cert1',name:'Retail Industry Fundamentals Specialist',issuer:'NRF Foundation RISE Up',credNum:'63594574',issued:'05/04/2026',expires:'No expiration',earned:true},
+    {id:'cert2',name:'Adult Mental Health First Aid USA',issuer:'National Council for Mental Wellbeing',credNum:'—',issued:'03/12/2026',expires:'03/12/2029',earned:true},
+   ]}]},
+  {id:'phle',label:'Phlebotomy Technician Certificate',badge:'b-phle',badgeText:'165 hours',icon:'💉',isPhle:true,
+   note:'This is real, hands-on clinical training — learning to draw blood and work in a laboratory setting. It pairs beautifully with your chemistry studies and looks wonderful on a resume. This is a non-credit continuing education program — Florida VR (Mr. Odell Robbins) is expected to fund it. Scheduling will be confirmed once the VR plan is in place.',advFlag:'adv-phle',
+   areas:[{areaLabel:'Certificate courses',courses:[
+    {id:'ph1',code:'HSC 0003C',name:'Basic Health Care Worker',clockHours:90,req:true},
+    {id:'ph2',code:'MEA 0520C',name:'Phlebotomist',clockHours:75,req:true,note:'💡 Clinical skills that complement the biochemistry path'},
+   ]}]},
+  {id:'fsu',label:"FSU Bachelor's — Upper Division",badge:'b-chem',badgeText:'At FSU',icon:'🏛️',isFSU:true,
+   note:"These courses are completed AT Florida State University after Reyna transfers. They cannot be taken at CFK. This section shows the full picture of the Chemical Engineering BS degree so nothing is a surprise when she arrives. All 3000- and 4000-level chemistry courses must be taken at FSU.",
+   areas:[
+    {areaLabel:'FSU Term 1 — Fall (Junior Year — first semester at FSU) 🚀',courses:[
+      {id:'fsu1',code:'EGN 1004L',name:'First Year Engineering Lab ★ Take first semester!',credits:1,fsuOnly:true,fsuNote:'C- required — FSU only. Transfer students must enroll first semester. Required to declare Chemical Engineering major.'},
+      {id:'fsu2',code:'ECH 3023',name:'Mass and Energy Balances I — your first real ChemE course! 🎉',credits:3,fsuOnly:true,fsuNote:'Requires CHM 1045 + MAC 2311 — both completed at CFK. Reyna is ready for this on day one!'},
+      {id:'fsu3',code:'MAC 2313',name:'Calculus III (if not completed at CFK)',credits:5,fsu:'bsdegree',fsuNote:'Complete at CFK if possible — tracked in Math Journey Part B'},
+      {id:'fsu4',code:'CHM 2210',name:'Organic Chemistry I',credits:3,fsuOnly:true,fsuNote:'Requires CHM 1045 + CHM 1046 — both completed at CFK'},
+      {id:'fsu5',code:'PHY 2048C',name:'General Physics A with Lab (if not completed at CFK)',credits:5,fsu:'bsdegree',fsuNote:'Complete at CFK if possible — required for BS degree'},
+    ]},
+    {areaLabel:'FSU Term 2 — Spring (Junior Year)',courses:[
+      {id:'fsu6',code:'ECH 3024',name:'Mass and Energy Balances II',credits:4,fsuOnly:true,fsuNote:'Requires ECH 3023 — taken Term 1'},
+      {id:'fsu7',code:'ECH 3301',name:'Process Analysis and Design',credits:4,fsuOnly:true,fsuNote:'Requires MAP 2302 — complete at CFK first! FSU only accepts MAP 2302 or MAP 2305.'},
+      {id:'fsu8',code:'CHM 2211',name:'Organic Chemistry II',credits:3,fsuOnly:true,fsuNote:'Requires CHM 2210 — taken Term 1'},
+      {id:'fsu9',code:'PHY 2049C',name:'General Physics B with Lab (if not completed at CFK)',credits:5,fsu:'bsdegree',fsuNote:'Complete at CFK if possible — required for BS degree'},
+    ]},
+    {areaLabel:'FSU Term 3 — Fall (Senior Year)',courses:[
+      {id:'fsu10',code:'ECH 3101',name:'Thermodynamics',credits:3,fsuOnly:true,fsuNote:'Requires ECH 3023 + ECH 3024'},
+      {id:'fsu11',code:'ECH 3266',name:'Transport Phenomena I',credits:3,fsuOnly:true,fsuNote:'Requires ECH 3023 + MAC 2313'},
+      {id:'fsu12',code:'ECH 3854',name:'Chemical Engineering Computations',credits:4,fsuOnly:true,fsuNote:'Requires ECH 3023'},
+      {id:'fsu13',code:'ECH 3844',name:'Chemical Engineering Statistics',credits:3,fsuOnly:true},
+      {id:'fsu14',code:'EGM 3512',name:'Engineering Mechanics',credits:4,fsuOnly:true,fsuNote:'Required General Engineering course'},
+    ]},
+    {areaLabel:'FSU Term 4 — Spring (Senior Year)',courses:[
+      {id:'fsu15',code:'ECH 3274L',name:'Transport Phenomena Lab',credits:3,fsuOnly:true,fsuNote:'Requires ECH 3266'},
+      {id:'fsu16',code:'ECH 3418',name:'Separations Processes',credits:3,fsuOnly:true,fsuNote:'Requires ECH 3024'},
+      {id:'fsu17',code:'ECH 4267',name:'Transport Phenomena II',credits:3,fsuOnly:true,fsuNote:'Requires ECH 3266 + ECH 3274L'},
+      {id:'fsu18',code:'EEL 3003',name:'Introduction to Electrical Engineering',credits:3,fsuOnly:true,fsuNote:'Required General Engineering course'},
+      {id:'fsu19',code:'Adv Chem',name:'Advanced Chemistry Elective — BCH 4053 recommended',credits:3,fsuOnly:true,fsuNote:'BCH 4053 General Biochemistry I recommended for biochemical engineering focus. Other options: CHM 3120, CHM 4410.'},
+    ]},
+    {areaLabel:'FSU Terms 5 & 6 — Senior Capstone Year',courses:[
+      {id:'fsu20',code:'ECH 4404L',name:'Unit Operations Lab',credits:3,fsuOnly:true,fsuNote:'Satisfies Upper Division Writing requirement — grade of C or better required'},
+      {id:'fsu21',code:'ECH 4504',name:'Kinetics and Reactor Design',credits:3,fsuOnly:true,fsuNote:'Grade of C or better required in all ECH courses'},
+      {id:'fsu22',code:'ECH 4323',name:'Process Control + Lab',credits:4,fsuOnly:true},
+      {id:'fsu23',code:'ECH 4604',name:'Chemical Engineering Process Design I',credits:4,fsuOnly:true,fsuNote:'Satisfies Scholarship in Practice (SIP) requirement'},
+      {id:'fsu24',code:'ECH 4615',name:'Chemical Engineering Process Design II',credits:3,fsuOnly:true,fsuNote:'Capstone — satisfies Scholarship in Practice requirement'},
+      {id:'fsu25',code:'ECH 4xxx',name:'Chemical Engineering Electives (2 courses, 6 cr)',credits:6,fsuOnly:true,fsuNote:'6 credit hours of approved ChemE electives required'},
+      {id:'fsu26',code:'MAP 2302',name:'Differential Equations (if not completed at CFK)',credits:3,fsu:'bsdegree',fsuNote:'Complete at CFK if possible — tracked in Math Journey Part B'},
+    ]},
+    {areaLabel:'Studio Art Minor — remaining credits at FSU (if needed after CFK)',courses:[
+      {id:'art4',code:'ART 3xxx+',name:'Upper-level Studio Art elective at FSU (if needed to reach 12 minor credits)',credits:3,fsuOnly:true,fsuNote:'ARH 1000 from CFK cannot double-count per FSU Gen Ed policy'},
+    ]},
+    {areaLabel:'Minor — Studio Art (12 credits at FSU) 🎨',courses:[
+      {id:'art1',code:'ART 1201C',name:'Drawing I — Foundation studio course',credits:3,fsuOnly:true,fsuNote:'May be satisfied by ART 1300C taken at CFK — confirm with FSU Art dept'},
+      {id:'art2',code:'ART 1300C',name:'Two-Dimensional Design',credits:3,fsuOnly:true,fsuNote:'Core foundation course for the minor'},
+      {id:'art3',code:'ART Studio',name:'Studio Art elective — choose from CFK or FSU courses',credits:3,fsuOnly:true,fsuNote:'CFK offers ART 2554C (Oil Painting), ART 2001C (Creative Expression), ART 2772C (Raku) — confirm transferability with FSU'},
+      {id:'art4',code:'ART Studio',name:'Upper-level Studio Art elective (3000+) — at FSU',credits:3,fsuOnly:true,fsuNote:'This slot likely requires an upper-level FSU course. ARH 1000 from CFK cannot double-count per FSU Gen Ed policy.'},
+    ]},
+   ]},
+  {id:'cfkart',label:'Studio Art — CFK Courses 🎨',badge:'b-cert',badgeText:'toward minor',icon:'🎨',isCFKArt:true,
+   note:"Reyna needs 12 credits (4 courses) for the FSU Studio Art Minor. The 4 selected courses below can all be taken at CFK and transfer under Florida's SCNS — saving significant FSU tuition! ART 1300C is scheduled for Summer 2027. Timing for the other 3 should be confirmed with her advisor. Also ask the advisor whether Reyna can receive college credit for the non-credit ceramics courses she already paid for through CFK's Community Education Program.",
+   areas:[{areaLabel:'Selected Courses (12 credits toward Studio Art Minor) — choose these 4',advFlag:'adv-cfkart',courses:[
+    {id:'cfa1',code:'ART 1300C',name:'Beginning Drawing',credits:3,xfer:'yes',semester:'Summer 2027',fsuNote:'Foundational course — counts toward Studio Art minor at FSU'},
+    {id:'cfa2',code:'ART 1750C',name:'Ceramics I — Hand Building, Firing and Glazing',credits:3,xfer:'yes',semester:'Fall 2027',fsuNote:"Natural starting point given Reyna's ceramics background — Lab fee $75"},
+    {id:'cfa3',code:'ART 1754C',name:'Ceramics II',credits:3,xfer:'yes',semester:'Spring 2028',fsuNote:'Prerequisite: ART 1750C with grade C or higher — Lab fee $120'},
+    {id:'cfa6',code:'ART 2752C',name:'Wheel Throwing I',credits:3,xfer:'yes',semester:'Summer 2028',fsuNote:'Prerequisite: ART 1750C with grade C or higher — Lab fee $85'},
+   ]},{areaLabel:'Optional Additional Courses (if she wants to explore further)',courses:[
+    {id:'cfa4',code:'ART 2001C',name:'Creative Expression',credits:3,xfer:'yes',fsuNote:'Optional — traditional and unconventional art forms'},
+    {id:'cfa5',code:'ART 2554C',name:'Beginning Oil Painting',credits:3,xfer:'yes',fsuNote:'Optional — students provide supplies'},
+    {id:'cfa7',code:'ART 2772C',name:'Raku',credits:3,xfer:'yes',fsuNote:'Optional — Lab fee $120'},
+   ]}]},
+  {id:'tx',label:'Transfer Checklist 🚀',badge:'b-chem',badgeText:'University Transfer',icon:'🚀',isChecklist:true,
+   note:'These are the big milestones before you apply to a university engineering program. You do not need to worry about all of these right now — just focus on your courses one at a time. When the time comes, your advisor and Vocational Rehabilitation counselor will help you check every single one of these off!',
+   areas:[{areaLabel:'Before you apply — check each one off when ready!',courses:[
+    {id:'tx0a',name:'Verified FSU transfer application deadline with advisor — target November for Fall entry',advisorFlag:true,creditFlag:30},
+    {id:'tx0b',name:'Submitted FSU transfer application',advisorFlag:true,creditFlag:30},
+    {id:'tx1',name:'AA degree awarded (or I am in my final semester)'},
+    {id:'tx2',name:'Calculus I completed with C- or better (required to enroll) — Calculus II, Chem I & II strongly encouraged before transfer'},
+    {id:'tx3',name:'GPA of 2.5 or higher in transfer courses (2.0 overall minimum)'},
+    {id:'tx4',name:'Foreign language requirement documented',advisorFlag:true,advFlag:'adv-fl'},
+    {id:'tx5',name:'Florida Civic Literacy Exam — verify FCLE score on high school transcript (likely waived)',advisorFlag:true,advFlag:'adv-cl'},
+    {id:'tx6',name:'Disability services contacted at my target university'},
+    {id:'tx7',name:'Vocational Rehabilitation support plan confirmed for university'},
+    {id:'tx8',name:'Applied to Chemical/Biochemical Engineering — I did it! 🎉'},
+    {id:'tx9',name:'Housing and independent living plan is ready'},
+    {id:'tx10',name:'Explored Clinical Research Associate (CRA) certification with advisor or VR',advisorFlag:true,advFlag:'adv-cra'},
+   ]}]},
+];
+
+/* ── STATE ── */
+function load(){try{return JSON.parse(localStorage.getItem(SK))||{};}catch{return{}}}
+function persist(s){
+  try{localStorage.setItem(SK,JSON.stringify(s));}catch{}
+  const b=document.getElementById('savebar');
+  b.classList.add('show');clearTimeout(b._t);
+  b._t=setTimeout(()=>b.classList.remove('show'),2200);
+}
+let state=load();
+[
+  // Pre-marked certifications and developmental writing
+  // MAT 0018 Developmental Math I — not yet completed
+  ['ar0',{done:true,grade:'S',credits:0}],   // REC 0190 Ceramics Wheel Throwing
+  ['ar1',{done:true,grade:'S',credits:0}],   // REC 0183 Ceramics Hand Building
+  ['w0',{done:true,grade:'A.',credits:3}],
+  // Fall 2026 — In Progress
+  ['m2',  {done:false,grade:'IP',credits:4}],   // MAT 1033 Intermediate Algebra
+  ['aa31',{done:false,grade:'IP',credits:3}],   // BSC 1085 A&P I
+  ['aa31L',{done:false,grade:'IP',credits:1}],  // BSC 1085L A&P I Lab
+  ['w2',  {done:false,grade:'IP',credits:3}],   // ENC 1101 English Comp I
+  ['aa4', {done:false,grade:'IP',credits:3}],   // ARH 1000 Art Appreciation
+  ['pa6r',{done:true,grade:'A.',credits:3}],  // REA 0007 Developmental Reading I
+  ['cert1',{done:true}],
+  ['cert2',{done:true}],
+  // Fall 2025 — all A's
+  ['pa4', {done:true,grade:'A',credits:1}],   // LIS 1000 Info Literacy
+  ['pa0', {done:true,grade:'S',credits:0}],    // REC 0194 Academic Support
+  ['pa1', {done:true,grade:'A',credits:2}],   // SLS 1102 College Experience
+  ['pa3', {done:true,grade:'A',credits:2}],   // SLS 1304 Career Exploration
+  ['pa2', {done:true,grade:'A',credits:2}],   // SLS 1570 Learning with Technology
+  // Spring 2026 — all A's
+  ['aa27',{done:true,grade:'A',credits:3}],   // CGS 1100 Computer Applications
+  ['pa5', {done:true,grade:'A',credits:2}],   // SLS 2604 Effective Living
+  // Summer 2026 — in progress
+  ['aa12',{done:true,grade:'B',credits:3}],   // AST 1002 Astronomy — Summer 2026 grade B
+  ['pa6', {done:true,grade:'A.',credits:3}],  // REA 0007 Developmental Reading
+  ['pa7', {done:true,grade:'A',credits:2}],   // SLS 2950 Professional Portfolio
+  ['aa18',{done:true,grade:'A',credits:3}],   // SLS 2930 Career Seminar — Summer 2026 grade A
+].forEach(([id,v])=>{if(!state[id]){state[id]=v;persist(state);}});
+function getS(id){return state[id]||{done:false,grade:'',credits:null}}
+function allC(prog){return prog.areas.flatMap(a=>a.courses)}
+
+/* ── METRICS ── */
+function navTo(pid){
+  // Expand phase wrappers if needed
+  const paWrap=document.getElementById('pa-collapsible-wrap');
+  const txWrap=document.getElementById('tx-collapsible-wrap');
+  const fsuWrap=document.getElementById('fsu-collapsible-wrap');
+  if(paWrap&&paWrap.classList.contains('pa-hidden')){paWrap.classList.remove('pa-hidden');state['pa_collapsed']=false;persist(state);}
+  if(txWrap&&txWrap.classList.contains('tx-hidden')){txWrap.classList.remove('tx-hidden');state['tx_collapsed']=false;persist(state);}
+  if(fsuWrap&&fsuWrap.classList.contains('fsu-hidden')){fsuWrap.classList.remove('fsu-hidden');state['fsu_phase_collapsed']=false;persist(state);}
+  // Find section and expand if collapsed
+  const sec=document.getElementById('sec-'+pid);
+  if(sec){
+    if(sec.classList.contains('collapsed')) sec.classList.remove('collapsed');
+    setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+  }
+}
+
+function djDot(status){return `<div class="dj-dot ${status}"></div>`;}
+
+function renderMetrics(){
+  // AA credits
+  let aaC=0;
+  programs.find(p=>p.id==='aa').areas.forEach(a=>a.courses.forEach(c=>{
+    const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));
+  }));
+  mathSeqA.forEach(c=>{if(!c.devEd){const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  aaC=Math.min(60,aaC);
+  const aaPct=Math.min(100,Math.round(aaC/60*100));
+
+  // Math Part A (CFK only)
+  const mTotal=mathSeqA.length;
+  const mDone=mathSeqA.filter(c=>getS(c.id).done).length;
+  const mPct=Math.round(mDone/mTotal*100);
+  const mDots=mathSeqA.map(c=>{const s=getS(c.id);return djDot(s.done?'done':s.grade==='IP'?'inprog':'plan');}).join('');
+
+  // Science Part A (CFK only)
+  const sTotal=sciSeqA.length;
+  const sDone=sciSeqA.filter(c=>getS(c.id).done).length;
+  const sPct=Math.round(sDone/sTotal*100);
+  const sDots=sciSeqA.map((c,i)=>{const s=getS(c.id);if(i===0&&!s.done)return djDot('inprog');return djDot(s.done?'done':s.grade==='IP'?'inprog':'plan');}).join('');
+
+  // Writing
+  const writeProg=programs.find(p=>p.id==='write');
+  const writeC=writeProg?writeProg.areas[0].courses:[];
+  const wTotal=writeC.length;
+  const wDone=writeC.filter(c=>getS(c.id).done||(c.done2526)).length;
+  const wPct=Math.round(wDone/wTotal*100);
+  const wDots=writeC.map(c=>{const s=getS(c.id);return djDot((s.done||c.done2526)?'done':s.grade==='IP'?'inprog':'plan');}).join('');
+
+  // Art (CFK only)
+  const artCFK=artSeq.filter(c=>!c.artFSU);
+  const artDone=artCFK.filter(c=>c.artBuild||getS(c.id).done).length;
+  const artPct=Math.round(artDone/artCFK.length*100);
+  const artDots=artCFK.map(c=>{const s=getS(c.id);return djDot((c.artBuild||s.done)?'done':s.grade==='IP'?'inprog':c.semester&&c.semester.includes('TBD')?'tbd':'plan');}).join('');
+
+  // Electives
+  const elecIds=['aa4','aa6','aa12','aa15','aa17','aa18','aa27','aa28','aa31','aa31L','aa33','pa1','pa2','pa3','pa5','pa7'];
+  const elecDone=elecIds.filter(id=>getS(id).done).length;
+  const elecTotal=elecIds.length;
+  const elecPct=Math.round(elecDone/elecTotal*100);
+  const elecDots=elecIds.map(id=>{const s=getS(id);return djDot(s.done?'done':s.grade==='IP'?'inprog':'plan');}).join('');
+
+  // Phlebotomy
+  let phC=0;
+  programs.find(p=>p.id==='phle').areas[0].courses.forEach(c=>{if(getS(c.id).done)phC+=c.clockHours||0;});
+  const phPct=Math.round(phC/165*100);
+
+  const flagEl=document.getElementById('credit-flag-banner');
+  if(flagEl){flagEl.classList.toggle('show',aaC>=30&&(!getS('tx0a').done||!getS('tx0b').done));}
+
+  document.getElementById('metrics').innerHTML=`
+    <div class="dash-aa-row">
+      <div class="dash-aa" onclick="navTo('aa')" role="button" tabindex="0" aria-label="Go to AA Degree section">
+        <div class="dash-aa-icon">🎓</div>
+        <div class="dash-aa-content">
+          <div class="dash-aa-title">AA Degree — College of the Florida Keys</div>
+          <div class="dash-aa-sub">All journeys below feed into this goal · Target: 60 credits · Tap to explore</div>
+          <div class="dash-aa-bar-wrap"><div class="dash-aa-bar" style="width:${aaPct}%"></div></div>
+          <div class="dash-aa-stats"><span>${aaC} of 60 credits earned so far</span><span>${aaPct}% complete</span></div>
+          <div class="dash-aa-feeds">
+            <span class="dash-aa-feed">✍️ Writing</span>
+            <span class="dash-aa-feed">🔢 Math</span>
+            <span class="dash-aa-feed">🔬 Science</span>
+            <span class="dash-aa-feed">🎨 Art</span>
+            <span class="dash-aa-feed">📚 Electives</span>
+            <span class="dash-aa-feed">💉 Phlebotomy (VR)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dash-journeys-row">
+      <div class="dash-journey" onclick="navTo('write')" role="button" tabindex="0">
+        <div class="dj-top"><span class="dj-icon">✍️</span><span class="dj-pct" style="color:#1E40AF">${wDone}/${wTotal}</span></div>
+        <div class="dj-label">Writing & English</div>
+        <div class="dj-steps">${wDots}</div>
+        <div class="dj-bar-wrap"><div class="dj-bar" style="width:${wPct}%;background:#3B82F6"></div></div>
+        <div class="dj-status">${wPct===100?'✓ Complete! 🎉':wDone>0?`${wPct}% — keep writing! ✏️`:'Starting Fall 2026 ✏️'}</div>
+      </div>
+      <div class="dash-journey" onclick="navTo('math')" role="button" tabindex="0">
+        <div class="dj-top"><span class="dj-icon">🔢</span><span class="dj-pct" style="color:#D97706">${mDone}/${mTotal}</span></div>
+        <div class="dj-label">Math Journey</div>
+        <div class="dj-steps">${mDots}</div>
+        <div class="dj-bar-wrap"><div class="dj-bar" style="width:${mPct}%;background:#FFB347"></div></div>
+        <div class="dj-status">${mPct===100?'✓ Complete! 🎉':mDone>0?`${mPct}% — one step at a time 🌟`:'Starting Fall 2026 🔢'}</div>
+      </div>
+      <div class="dash-journey" onclick="navTo('sci')" role="button" tabindex="0">
+        <div class="dj-top"><span class="dj-icon">🔬</span><span class="dj-pct" style="color:#065F46">${sDone}/${sTotal}</span></div>
+        <div class="dj-label">Science Journey</div>
+        <div class="dj-steps">${sDots}</div>
+        <div class="dj-bar-wrap"><div class="dj-bar" style="width:${sPct}%;background:#1D9E75"></div></div>
+        <div class="dj-status">${sPct===100?'✓ Complete! 🎉':sDone>0?`${sPct}% — building your foundation 🌿`:'Starting Fall 2026 🔬'}</div>
+      </div>
+      <div class="dash-journey" onclick="navTo('art')" role="button" tabindex="0">
+        <div class="dj-top"><span class="dj-icon">🎨</span><span class="dj-pct" style="color:#9D174D">${artDone}/${artCFK.length}</span></div>
+        <div class="dj-label">Art Journey</div>
+        <div class="dj-steps">${artDots}</div>
+        <div class="dj-bar-wrap"><div class="dj-bar" style="width:${artPct}%;background:#FFB8C6"></div></div>
+        <div class="dj-status">${artPct===100?'✓ Complete! 🎉':artDone>0?`${artPct}% — your creativity shines 🎨`:'Journey started Spring 2026 🏺'}</div>
+      </div>
+      <div class="dash-journey dash-elec" onclick="navTo('aa')" role="button" tabindex="0">
+        <div class="dj-top"><span class="dj-icon">📚</span><span class="dj-pct" style="color:#C2410C">${elecDone}/${elecTotal}</span></div>
+        <div class="dj-label">Electives & Areas</div>
+        <div class="dj-steps">${elecDots}</div>
+        <div class="dj-bar-wrap"><div class="dj-bar" style="width:${elecPct}%;background:#F97316"></div></div>
+        <div class="dj-status">${elecPct===100?'✓ Complete! 🎉':elecDone>0?`${elecPct}% — filling the AA areas 📚`:'Astronomy ✓ Career Seminar ✓ · SLS courses transfer to FSU as electives 🎓'}</div>
+      </div>
+      <div class="dash-journey dash-phle" onclick="navTo('phle')" role="button" tabindex="0">
+        <div class="dj-top"><span class="dj-icon">💉</span><span class="dj-pct" style="color:#065F46">${getS('ph1').done&&getS('ph2').done?'2/2':getS('ph1').done?'1/2':'0/2'}</span></div>
+        <div class="dj-label">Phlebotomy Cert</div>
+        <div class="dj-steps">${djDot(getS('ph1').done?'done':'plan')}${djDot(getS('ph2').done?'done':'plan')}</div>
+        <div class="dj-bar-wrap"><div class="dj-bar" style="width:${getS('ph1').done&&getS('ph2').done?100:getS('ph1').done?50:0}%;background:#1D9E75"></div></div>
+        <div class="dj-status">${getS('ph1').done&&getS('ph2').done?'✓ Complete! 🎉':'VR funding — Mr. Odell Robbins 💚'}</div>
+      </div>
+    </div>`;
+}
+/* ── PILL ── */
+function pill(c,s){
+  if(s.done&&c.done2526) return `<span class="pill p-done">✓ 2025–26</span>`;
+  if(s.done) return `<span class="pill p-done">✓ Done!</span>`;
+  if(c.stepLabel) return `<span class="pill p-found">${c.stepLabel}</span>`;
+  if(c.priority) return `<span class="pill p-key">★ Transfer</span>`;
+  return `<span class="pill p-pend">Not yet</span>`;
+}
+
+/* ── FSU BADGE ── */
+/* ── ADVISOR FLAGS ── */
+const advFlags={
+  'adv-ix': {id:'adv-ix',title:'📋 Confirm with Advisor — Area IX (College Success)',msg:'Reyna completed SLS 1102 (College Experience) through Project ACCESS. Ask your advisor to confirm whether SLS 1102 satisfies the Area IX College Success requirement — if so, no additional SLS course is needed. Note: all SLS courses transfer to FSU as general elective credit.'},
+  'adv-vi': {id:'adv-vi',title:'📋 Confirm with Advisor — Area VI (General Education)',msg:'SLS 2930 (Career Seminar) may not qualify as a General Education course. Ask your advisor to confirm it counts toward Area VI, or identify a replacement.'},
+  'adv-ii': {id:'adv-ii',title:'📋 Confirm with Advisor — Area II (Humanities)',msg:'Confirm that CRW 2100 (Beginning Fiction Writing) satisfies the Area II Humanities requirement. Note: the writing requirement (F.A.C. 6A-10.030) is satisfied separately by ENC 1101 and ENC 1102 in Area I.'},
+  'adv-fl': {id:'adv-fl',title:'📋 Confirm with Advisor — Foreign Language',msg:"Verify that two years of sequential high school foreign language is documented on Reyna's official high school transcript and on file with CFK."},
+  'adv-cl': {id:'adv-cl',title:'📋 Confirm with Advisor — Civic Literacy Exam',msg:"Verify that Reyna's passing FCLE score from high school is on her official transcript. If confirmed, the postsecondary exam is waived — only POS 1041 is required."},
+  'adv-phle':{id:'adv-phle',title:'📋 Phlebotomy Technician Certificate — VR Funding',msg:'Florida Vocational Rehabilitation (VR) contact: Mr. Odell Robbins. VR is expected to fund the Phlebotomy Technician Certificate. Note: this is a non-credit continuing education program offered by CFK — not a college credit course. Confirm: (1) VR funding approval and enrollment plan with Mr. Robbins, (2) scheduling of HSC 0003C and MEA 0520C once VR plan is confirmed.'},
+  'adv-mat':{id:'adv-mat',title:'📋 Confirm with Advisor — MAT 1033 Placement',msg:'Reyna has a high school diploma and is exempt from developmental math (MAT 0018, MAT 0028). She will begin the Math Journey at MAT 1033 (Intermediate Algebra) in Fall 2026. Confirm placement with her advisor and ensure no registration blocks remain.'},
+  'adv-cfkart':{id:'adv-cfkart',title:'📋 Confirm with Advisor — Studio Art Courses & Community Education Credit',msg:"1) Confirm when ART 1750C, ART 1754C, and ART 2752C are offered at CFK so Reyna can schedule them. 2) Ask whether Reyna can receive college credit for non-credit ceramics courses she already paid for through CFK's Community Education Program — this is worth exploring given her documented participation. 3) Confirm with the FSU Department of Art at (850) 644-8252 that CFK ART-prefix courses will count toward the Studio Art Minor specifically. 4) Confirm whether any credits must be taken in residence at FSU."},
+  'adv-art':{id:'adv-art',title:'📋 Confirm with FSU Art Department — Studio Art Minor',msg:"Verify the current course requirements for the Studio Art minor at FSU with the Department of Art. Confirm which ART-prefix courses satisfy the 12-credit requirement, whether ARH 1000 (Art Appreciation) taken at CFK can count toward the minor (Gen Ed courses typically cannot double-count), and how to formally declare the minor after transfer. Contact the FSU Art Department at (850) 644-8252."},
+  'adv-cra':{id:'adv-cra',title:'💡 Explore with Advisor or VR — Clinical Research Associate Certification',msg:"A Certified Clinical Research Associate (CRA) credential is a natural complement to Reyna's biochemical engineering path and Phlebotomy Technician experience. CRAs work in clinical trials and pharmaceutical research — combining biology, chemistry, and patient care. Ask your advisor or Vocational Rehabilitation counselor about programs, eligibility, and funding options. Organizations like ACRP (Association of Clinical Research Professionals) offer the CCRA credential."},
+  'adv-sls':{id:'adv-sls',title:'✓ Confirmed — SLS Course Transferability',msg:"SLS courses (SLS 1102, 1304, 1570, 2604, 2950, 2930) transfer to FSU as general elective credit under Florida SCNS. They count toward FSU's 120-credit degree requirement but do not satisfy specific FSU General Education or major requirements. For FSU General Ed equivalency questions, contact undergraduatestudies@fsu.edu."},
+};
+function advFlagHTML(flagId){
+  const f=advFlags[flagId];if(!f)return'';
+  const done=!!state['advflag_'+flagId];
+  return `<div class="adv-flag${done?' resolved':''}" id="advflag-wrap-${flagId}">
+    <div class="adv-flag-icon">👩‍🏫</div>
+    <div class="adv-flag-body">
+      <div class="adv-flag-title">${f.title}</div>
+      <div class="adv-flag-msg">${f.msg}</div>
+      <div class="adv-flag-check">
+        <input type="checkbox" class="adv-flag-cb" id="advflag-cb-${flagId}" ${done?'checked':''}
+          onchange="toggleAdvFlag('${flagId}',this.checked)">
+        <label class="adv-flag-label" for="advflag-cb-${flagId}">${done?'✓ Confirmed with advisor!':'Mark as confirmed with advisor'}</label>
+      </div>
+    </div>
+  </div>`;
+}
+function toggleAdvFlag(flagId,checked){
+  state['advflag_'+flagId]=checked;persist(state);
+  const wrap=document.getElementById('advflag-wrap-'+flagId);
+  if(wrap){
+    const lbl=wrap.querySelector('.adv-flag-label');
+    checked?wrap.classList.add('resolved'):wrap.classList.remove('resolved');
+    if(lbl)lbl.textContent=checked?'✓ Confirmed with advisor!':'Mark as confirmed with advisor';
+  }
+}
+
+function fsuBadge(fsu,fsuOnly){
+  if(fsuOnly) return `<span class="pill p-fsu-only" style="font-size:10px;padding:2px 7px">🏛 FSU only</span>`;
+  if(!fsu||fsu==='none') return '';
+  const map={
+    required:   ['p-fsu-req','⭐ Required to enroll'],
+    encouraged: ['p-fsu-enc','★ Strongly encouraged'],
+    bsdegree:   ['p-fsu-bs', 'Needed for BS degree'],
+    recommended:['p-fsu-rec','FSU recommends'],
+  };
+  const [cls,label]=map[fsu]||['p-verify','FSU: verify'];
+  return `<span class="pill ${cls}" style="font-size:10px;padding:2px 7px">${label}</span>`;
+}
+
+/* ── TRANSFER BADGE ── */
+function xferBadge(x){
+  if(!x) return '';
+  const map={
+    yes:  ['p-xfer', '✓ Transfers'],
+    local:['p-local','CFK only — advisor confirm'],
+    dev:  ['p-dev',  'Non-credit / dev'],
+    verify:['p-verify','⚠ Verify with advisor'],
+    ip:   ['p-ip',   'In progress'],
+  };
+  const [cls,label]=map[x]||['p-verify','Unknown'];
+  return `<span class="pill ${cls}" style="font-size:10px;padding:2px 8px">${label}</span>`;
+}
+
+/* ── COURSE ROW ── */
+function crow(c,isPhle,isCL){
+  const s=getS(c.id);
+  const crVal=s.credits!=null?s.credits:c.credits;
+  let cls='crow';
+  if(s.done) cls+=' done';
+  if(c.priority) cls+=' priority';
+  else if(c.found||c.devEd) cls+=' foundation';
+  const crCell=isPhle?`<div style="font-size:13px;color:var(--text2);font-weight:700">${c.clockHours} hrs</div>`
+    :isCL?`<div></div>`
+    :c.devEd?`<div><span class="tag tag-build">building block</span></div>`
+    :`<input type="number" class="cr-in" min="0" max="6" step="1" value="${crVal||''}" placeholder="cr" onchange="updS('${c.id}','credits',this.value)" aria-label="Credits for ${c.name}">`;
+  const grCell=isCL?`<div></div>`
+    :`<select class="gr-sel" onchange="updGrade('${c.id}',this.value)" aria-label="Grade for ${c.name}">
+        <option value="">Grade</option>
+        ${['A','B+','B','C+','C','D','F','IP','W'].map(g=>`<option ${s.grade===g?'selected':''} value="${g}">${g}</option>`).join('')}
+       </select>`;
+  return `<div class="${cls}" id="row-${c.id}">
+    <div class="cb-wrap"><input type="checkbox" class="cb" ${s.done?'checked':''} onchange="tog('${c.id}',this.checked)" aria-label="Mark ${c.name} complete"></div>
+    <div>
+      <div class="cname">${c.name}${c.devEd?`<span class="tag tag-build">building block</span>`:''}${c.advisorFlag?`<span class="tag" style="background:var(--sky);color:#1E40AF;margin-left:6px">👩‍🏫 advisor</span>`:''}${c.creditFlag?`<span class="tag" style="background:var(--rose);color:#9D174D;margin-left:4px">⚠ by ${c.creditFlag} cr</span>`:''}</div>
+      ${c.semester?`<div style="font-size:11px;font-weight:700;color:#7C3AED;margin-top:2px">📅 ${c.semester}</div>`:''}
+      <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap">
+        ${c.code?`<span class="ccode">${c.code}${c.req?`<span class="tag tag-req">required</span>`:''}</span>`:''}
+        ${xferBadge(c.xfer)}${fsuBadge(c.fsu,c.fsuOnly)}
+      </div>
+      ${c.fsuNote&&!getS(c.id).done?`<div style="font-size:11px;color:var(--text3);margin-top:2px;font-style:italic">${c.fsuNote}</div>`:''}
+      ${c.note?`<div style="font-size:12px;color:#065F46;background:var(--mint);display:inline-block;padding:2px 8px;border-radius:99px;margin-top:4px;font-weight:700">${c.note}</div>`:''}
+    </div>
+    ${crCell}${grCell}${pill(c,s)}
+  </div>${c.advFlag?advFlagHTML(c.advFlag):''}`;
+}
+
+/* ── CERT CARD ── */
+function certCard(c){
+  return `<div class="cert-card" id="row-${c.id}">
+    <div class="cert-icon">🏅</div>
+    <div style="flex:1">
+      <div class="cert-name">${c.name}</div>
+      <div class="cert-issuer">${c.issuer}</div>
+      <div class="cert-meta">
+        <span>#${c.credNum}</span>
+        <span>📅 Earned ${c.issued}</span>
+        <span style="color:${c.expires==='No expiration'?'#065F46':'#92400E'}">
+          ${c.expires==='No expiration'?'♾ Never expires':'🗓 Renew by '+c.expires}
+        </span>
+      </div>
+    </div>
+    <span class="pill p-done">✓ Earned!</span>
+  </div>`;
+}
+
+/* ── TOGGLE ── */
+function tog(id,checked){
+  if(!state[id]) state[id]={done:false,grade:'',credits:null};
+  state[id].done=checked;
+  persist(state);
+
+  // Check if this is a math course — re-render the whole pathway
+  const isMathCourse=[...mathSeqA,...mathSeqB].find(x=>x.id===id);
+  const isSciCourse=[...sciSeqA,...sciSeqB].find(x=>x.id===id);
+  const isArtCourse=artSeq.find(x=>x.id===id);
+  if(isArtCourse&&!isArtCourse.artBuild){
+    const artBody=document.getElementById('sec-art')?.querySelector('.sec-body');
+    if(artBody){
+      const noteVal=artBody.querySelector('textarea')?.value||'';
+      const reqNote=artBody.querySelector('.req-note');
+      artBody.innerHTML=renderArtPathway();
+      if(reqNote) artBody.appendChild(reqNote.cloneNode(true));
+      const nw=document.createElement('div');nw.className='notes-wrap';
+      nw.innerHTML=`<label>My notes</label><textarea rows="2" placeholder="Write anything here..." onchange="saveNote('art',this.value)">${noteVal}</textarea>`;
+      artBody.appendChild(nw);
+    }
+  } else if(isSciCourse){
+    const sciBody=document.getElementById('sec-sci')?.querySelector('.sec-body');
+    if(sciBody){
+      const notesWrap=sciBody.querySelector('.notes-wrap');
+      const noteVal=notesWrap?.querySelector('textarea')?.value||'';
+      const reqNote=sciBody.querySelector('.req-note');
+      sciBody.innerHTML=renderSciPathway();
+      if(reqNote) sciBody.appendChild(reqNote.cloneNode(true));
+      const nw=document.createElement('div');
+      nw.className='notes-wrap';
+      nw.innerHTML=`<label>My notes</label><textarea rows="2" placeholder="Write anything here..." onchange="saveNote('sci',this.value)">${noteVal}</textarea>`;
+      sciBody.appendChild(nw);
+    }
+  } else if(isMathCourse){
+    const mathBody=document.getElementById('sec-math')?.querySelector('.sec-body');
+    if(mathBody){
+      const notesWrap=mathBody.querySelector('.notes-wrap');
+      const noteVal=notesWrap?.querySelector('textarea')?.value||'';
+      const reqNote=mathBody.querySelector('.req-note');
+      mathBody.innerHTML=renderMathPathway();
+      // Re-append req-note and notes
+      if(reqNote) mathBody.appendChild(reqNote.cloneNode(true));
+      const nw=document.createElement('div');
+      nw.className='notes-wrap';
+      nw.innerHTML=`<label>My notes</label><textarea rows="2" placeholder="Write anything here..." onchange="saveNote('math',this.value)">${noteVal}</textarea>`;
+      mathBody.appendChild(nw);
+    }
+  } else {
+    // Non-math: re-render just the row
+    const allCourses=[...mathSeqA,...mathSeqB,...sciSeqA,...sciSeqB,...artSeq,...programs.flatMap(p=>p.areas.flatMap(a=>a.courses))];
+    const c=allCourses.find(x=>x.id===id);
+    if(c){
+      const isPhle=!!(programs.find(p=>p.isPhle)?.areas.flatMap(a=>a.courses).find(x=>x.id===id));
+      const isCL=!!(programs.find(p=>p.isChecklist)?.areas.flatMap(a=>a.courses).find(x=>x.id===id));
+      const newHtml=crow(c,isPhle,isCL);
+      const tmp=document.createElement('div');
+      tmp.innerHTML=newHtml;
+      const newRow=tmp.firstElementChild;
+      const oldRow=document.getElementById('row-'+id);
+      if(oldRow&&newRow) oldRow.replaceWith(newRow);
+    }
+  }
+  if(checked) boom();
+  renderMetrics();
+  metas();
+}
+function updS(id,f,v){
+  if(!state[id]) state[id]={done:false,grade:'',credits:null};
+  state[id][f]=v;persist(state);renderMetrics();
+}
+function updGrade(id,g){updS(id,'grade',g);}
+function saveNote(id,v){state['note_'+id]=v;persist(state);}
+function togSec(id){document.getElementById('sec-'+id).classList.toggle('collapsed');}
+
+function metas(){
+  [...programs,{id:'math',areas:[{courses:mathSeqA},{courses:mathSeqB}]},{id:'sci',areas:[{courses:[...sciSeqA,...sciSeqB]}]},{id:'art',areas:[{courses:artSeq}]}].forEach(p=>{
+    const el=document.getElementById('meta-'+p.id);if(!el)return;
+    let d=0,t=0;p.areas.flatMap(a=>a.courses).forEach(c=>{t++;if(getS(c.id).done)d++;});
+    el.textContent=`${d} / ${t} done`;
+
+    // Auto-collapse and badge when complete
+    const sec=document.getElementById('sec-'+p.id);
+    const badge=document.getElementById('complete-badge-'+p.id);
+    const isComplete=t>0&&d===t;
+
+    if(badge) badge.classList.toggle('show', isComplete);
+
+    // No auto-collapse — Reyna stays in control. Badge and confetti are the reward!
+  });
+}
+
+/* ── ART PATHWAY RENDERER ── */
+function artTileEmoji(c,isDone){
+  if(isDone) return '✅';
+  if(c.artBuild) return '🏺';
+  if(c.code==='ART 1300C') return '✏️';
+  if(c.code==='ART 1750C') return '🫙';
+  if(c.code==='ART 1754C') return '🎭';
+  if(c.code==='ART 2752C') return '🌀';
+  if(c.artFSU) return '🏛️';
+  return '🎨';
+}
+function artTile(c){
+  const s=getS(c.id);const isDone=s.done||c.done2526;
+  let tileCls='art-tile';
+  if(isDone) tileCls+=' at-done';
+  else if(c.artBuild) tileCls+=' at-build';
+  else if(c.artFSU) tileCls+=' at-fsu';
+  else tileCls+=' at-cfk';
+  const gradeOpts=['A','B+','B','C+','C','D','F','IP','W'].map(g=>`<option value="${g}"${s.grade===g?' selected':''}>${g}</option>`).join('');
+  return `<div class="${tileCls}" id="row-${c.id}">
+    <div>
+      <div class="at-top">
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <span class="at-step">${c.stepLabel||''}</span>
+          ${c.semester?`<span style="font-size:10px;font-weight:700;color:#9D174D;opacity:.9">${c.semester}</span>`:''}
+        </div>
+        ${c.artBuild?'<span style="font-size:18px">🏺</span>':`<input type="checkbox" class="at-cb" ${isDone?'checked':''} onchange="tog('${c.id}',this.checked)" aria-label="Mark ${c.name} complete">`}
+      </div>
+      <span class="at-emoji">${artTileEmoji(c,isDone)}</span>
+      <div class="at-name">${c.name}</div>
+      ${c.artBuild?`<span class="at-build-note">Building block 🎨</span>`:''}
+      ${c.note&&!c.artBuild?`<span class="at-build-note">${c.note}</span>`:''}
+      ${c.fsuNote?`<div style="font-size:10px;color:var(--text3);margin-top:4px;font-style:italic;line-height:1.3">${c.fsuNote}</div>`:''}
+    </div>
+    <div class="at-bottom">
+      <div><div class="at-code">${c.code}</div><div style="font-size:10px;color:var(--text3);font-weight:600">${c.artBuild?'Non-credit':c.credits+' credits'}</div></div>
+      ${c.artBuild||c.artFSU?'':`<select class="art-grade-sel" onchange="updGrade('${c.id}',this.value)" aria-label="Grade"><option value="">Grade</option>${gradeOpts}</select>`}
+    </div>
+  </div>`;
+}
+function renderArtPathway(){
+  const cfkC=artSeq.filter(c=>!c.artFSU);
+  const fsuC=artSeq.filter(c=>c.artFSU);
+  let h=`<div class="art-pathway">`;
+  h+=`<div class="art-part-header"><span class="art-part-label aph-cfk">CFK — Studio Art Courses (4 steps toward minor)</span><div class="art-part-sub">Building blocks shown first — Reyna's art journey started in Spring 2026! 🏺</div></div>`;
+  h+=`<div class="art-grid">`;cfkC.forEach(c=>{h+=artTile(c);});h+=`</div>`;
+  h+=`<div style="font-size:12px;font-weight:700;color:#9D174D;text-align:center;padding:.75rem;background:#FFF0F3;border-radius:var(--rsm);margin-top:.5rem">🏛️ An upper-level Studio Art elective at FSU may be needed to reach 12 minor credits</div>`;
+  h+=`</div></div>`;
+  return h;
+}
+
+/* ── WRITING PATHWAY RENDERER ── */
+function writeTileEmoji(c,isDone){
+  if(isDone) return '✅';
+  if(c.code==='ENC 1101') return '✏️';
+  if(c.code==='ENC 1102') return '📚';
+  return '📝';
+}
+function writeTile(c){
+  const s=getS(c.id);const isDone=s.done;
+  let tileCls='sci-tile';
+  if(isDone) tileCls+=' st-done';
+  else if(c.devEd) tileCls+=' st-dev';
+  else tileCls+=' st-bio';
+  const gradeOpts=['A','B+','B','C+','C','D','F','IP','W'].map(g=>`<option value="${g}"${s.grade===g?' selected':''}>${g}</option>`).join('');
+  return `<div class="${tileCls}" id="row-${c.id}">
+    <div>
+      <div class="st-top">
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <span class="st-step">${c.stepLabel||''}</span>
+          ${c.semester?`<span style="font-size:10px;font-weight:700;color:#378ADD;opacity:.9">${c.semester}</span>`:''}
+        </div>
+        <input type="checkbox" class="st-cb" style="border-color:rgba(0,0,0,0.15)" ${isDone?'checked':''} onchange="tog('${c.id}',this.checked)" aria-label="Mark ${c.name} complete">
+      </div>
+      <span class="st-emoji">${writeTileEmoji(c,isDone)}</span>
+      <div class="st-name">${c.name}</div>
+      ${c.devEd?`<span class="st-phle-note" style="background:var(--sky);color:#1E40AF;border-color:var(--sky2)">Building block</span>`:''}
+      ${c.req?`<span class="st-phle-note" style="background:var(--lav);color:#5B21B6;border-color:var(--lav2)">AA Area I ★</span>`:''}
+    </div>
+    <div class="st-bottom">
+      <div><div class="st-code">${c.code}</div><div style="font-size:10px;color:var(--text3);font-weight:600">${c.devEd?'Non-credit':c.credits+' credits'}</div></div>
+      ${c.devEd?'':`<select class="sci-grade-sel" onchange="updGrade('${c.id}',this.value)" aria-label="Grade"><option value="">Grade</option>${gradeOpts}</select>`}
+    </div>
+  </div>`;
+}
+function renderWritePathway(){
+  const prog=programs.find(p=>p.id==='write');
+  const wc=prog?prog.areas[0].courses:[];
+  let h=`<div class="sci-pathway">`;
+  h+=`<div class="sci-part-header"><span class="sci-part-label" style="background:var(--sky);color:#1E40AF;border:1.5px solid var(--sky2)">Writing & English — Complete at CFK</span><div class="sci-part-sub">From developmental writing to college composition — your words matter! ✍️💙</div></div>`;
+  h+=`<div class="sci-grid">`;wc.forEach(c=>{h+=writeTile(c);});h+=`</div></div>`;
+  return h;
+}
+
+/* ── SCIENCE PATHWAY RENDERER ── */
+function sciTileEmoji(c,isDone){
+  if(isDone) return '✅';
+  if(c.code.startsWith('BSC 108')) return '🫀';
+  if(c.code.startsWith('BSC 1010')||c.code.startsWith('BSC 1011')||c.code.startsWith('BSC 2010')) return '🧬';
+  if(c.code==='CHM 1045') return '⚗️';
+  if(c.code==='CHM 1046') return '🧪';
+  if(c.code.startsWith('PHY')) return '⚡';
+  if(c.code==='CHM 2210') return '🔗';
+  if(c.code==='CHM 2211') return '💊';
+  return '🔬';
+}
+function sciTile(c){
+  const s=getS(c.id);const isDone=s.done;
+  let tileCls='sci-tile';
+  if(isDone) tileCls+=' st-done';
+  else if(c.type==='ap') tileCls+=' st-ap';
+  else if(c.type==='bio') tileCls+=' st-bio';
+  else if(c.type==='chem') tileCls+=' st-chem';
+  else if(c.type==='fsu') tileCls+=' st-fsu';
+  const gradeOpts=['A','B+','B','C+','C','D','F','IP','W'].map(g=>`<option value="${g}"${s.grade===g?' selected':''}>${g}</option>`).join('');
+  let fsuBadgeHtml='';
+  if(c.fsu==='encouraged') fsuBadgeHtml=`<span class="st-fsu-badge">★ Encouraged</span>`;
+  else if(c.fsu==='recommended') fsuBadgeHtml=`<span class="st-fsu-badge">FSU recommends</span>`;
+  else if(c.fsu==='bsdegree') fsuBadgeHtml=`<span class="st-fsu-badge">BS degree</span>`;
+  return `<div class="${tileCls}" id="row-${c.id}">
+    <div>
+      <div class="st-top">
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <span class="st-step">${c.stepLabel||''}</span>
+          ${c.semester?`<span style="font-size:10px;font-weight:700;color:#1D9E75;opacity:.9">${c.semester}</span>`:''}
+        </div>
+        <input type="checkbox" class="st-cb" ${isDone?'checked':''} onchange="tog('${c.id}',this.checked)" aria-label="Mark ${c.name} complete">
+      </div>
+      <span class="st-emoji">${sciTileEmoji(c,isDone)}</span>
+      <div class="st-name">${c.name}</div>
+      ${c.phle?`<span class="st-phle-note">🩸 Supports Phlebotomy Cert</span>`:''}
+    </div>
+    <div class="st-bottom">
+      <div><div class="st-code">${c.code}</div><div style="font-size:10px;color:var(--text3);font-weight:600">${c.credits} credits</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+        ${fsuBadgeHtml}
+        <select class="sci-grade-sel" onchange="updGrade('${c.id}',this.value)" aria-label="Grade">
+          <option value="">Grade</option>${gradeOpts}
+        </select>
+      </div>
+    </div>
+  </div>`;
+}
+function renderSciPathway(){
+  let h=`<div class="sci-pathway">`;
+  h+=`<div class="sci-part-header"><span class="sci-part-label sph-a">Part A — Complete at CFK</span><div class="sci-part-sub">Biology first, then chemistry — building your science foundation step by step 🌿</div></div>`;
+  h+=`<div class="sci-grid">`;sciSeqA.forEach(c=>{h+=sciTile(c);});h+=`</div>`;
+  h+=`<div style="font-size:12px;font-weight:700;color:#1D9E75;text-align:center;padding:.75rem;background:var(--mint);border-radius:var(--rsm);margin-top:.5rem">🏛️ Physics A &amp; B and Organic Chemistry continue at FSU after transfer</div>`;
+  h+=`</div></div>`;
+  return h;
+}
+
+/* ── MATH PATHWAY RENDERER ── */
+function mathTileEmoji(c,isDone){
+  if(isDone) return '✅';
+  if(c.devEd) return '📖';
+  if(c.id==='m2') return '➕';
+  if(c.id==='m3') return '📐';
+  if(c.id==='m4') return '📏';
+  if(c.id==='m5') return '🔭';
+  if(c.id==='m6') return '🚀';
+  if(c.id==='m7') return '⚡';
+  if(c.id==='m8') return '🌌';
+  if(c.id==='m9') return '🏆';
+  return '🔢';
+}
+
+function mathTile(c){
+  const s=getS(c.id);
+  const isDone=s.done;
+  let tileCls='math-tile';
+  if(isDone) tileCls+=' mt-done';
+  else if(c.devEd) tileCls+=' mt-dev';
+  else if(c.priority) tileCls+=' mt-required';
+  else if(c.found) tileCls+=' mt-foundation';
+
+  const crLabel=c.devEd?'building block':(c.credits?c.credits+' credits':'—');
+  const gradeOpts=['A','B+','B','C+','C','D','F','IP','W'].map(g=>
+    `<option value="${g}"${s.grade===g?' selected':''}>${g}</option>`).join('');
+
+  let fsuBadgeHtml='';
+  if(c.fsu==='required') fsuBadgeHtml=`<span class="mt-fsu-badge mt-req-badge">⭐ Must enroll</span>`;
+  else if(c.fsu==='encouraged') fsuBadgeHtml=`<span class="mt-fsu-badge mt-enc-badge">★ Encouraged</span>`;
+  else if(c.fsu==='bsdegree') fsuBadgeHtml=`<span class="mt-fsu-badge mt-bs-badge">BS degree</span>`;
+
+  return `<div class="${tileCls}" id="row-${c.id}">
+    <div>
+      <div class="mt-top">
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <span class="mt-step">${c.stepLabel||''}</span>
+          ${c.semester?`<span style="font-size:10px;font-weight:700;color:#7C3AED;opacity:.85">${c.semester}</span>`:''}
+        </div>
+        <input type="checkbox" class="mt-cb" ${isDone?'checked':''}
+          onchange="tog('${c.id}',this.checked)" aria-label="Mark ${c.name} complete">
+      </div>
+      <span class="mt-emoji">${mathTileEmoji(c,isDone)}</span>
+      <div class="mt-name">${c.name.replace(' — MAC '+c.code.replace('MAC ',''),'').replace(' — MAP '+c.code.replace('MAP ',''),'')}</div>
+    </div>
+    <div class="mt-bottom">
+      <div>
+        <div class="mt-code">${c.code}</div>
+        <div class="mt-cr">${crLabel}</div>
+      </div>
+      ${c.devEd?'':
+        `<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          ${fsuBadgeHtml}
+          <select class="math-grade-sel" onchange="updGrade('${c.id}',this.value)" aria-label="Grade">
+            <option value="">Grade</option>${gradeOpts}
+          </select>
+        </div>`}
+    </div>
+  </div>`;
+}
+
+function renderMathPathway(){
+  let h=`<div class="math-pathway">`;
+
+  // Part A header
+  h+=`<div class="math-part-header">
+    <span class="math-part-label mph-a">Part A — Complete at CFK</span>
+    <div class="math-part-sub">Foundational math through Calculus II — take these one at a time 🐢💜</div>
+  </div>`;
+  h+=`<div class="math-grid">`;
+  mathSeqA.forEach(c=>{h+=mathTile(c);});
+  h+=`</div>`;
+
+  h+=`<div style="font-size:12px;font-weight:700;color:#7C3AED;text-align:center;padding:.75rem;background:var(--lav);border-radius:var(--rsm);margin-top:.5rem">🏛️ Calculus III and Differential Equations continue at FSU after transfer</div>`;
+  h+=`</div>`;
+  return h;
+}
+/* ── BUILD ONE SECTION ── */
+function buildSection(pid){
+  const prog=programs.find(p=>p.id===pid);
+  if(!prog) return null;
+  const isMath=pid==='math';
+  const isPhle=!!prog.isPhle,isCL=!!prog.isChecklist,isCerts=!!prog.isCerts,isFSU=!!prog.isFSU,isSci=!!prog.isSci,isCFKArt=!!prog.isCFKArt,isWrite=!!prog.isWrite,isArtJourney=!!prog.isArtJourney;
+  const p=prog;
+  let body='';
+  if(isArtJourney){
+    body=renderArtPathway();
+  } else if(isWrite){
+    body=renderWritePathway();
+  } else if(isSci){
+    body=renderSciPathway();
+  } else if(isMath){
+    body=renderMathPathway();
+  } else if(isCerts){
+    p.areas.forEach(a=>{body+=`<div class="area-label">${a.areaLabel}</div>`;a.courses.forEach(c=>{body+=certCard(c);});});
+  } else if(isFSU){
+    body=`<div class="col-hdr"><span></span><span>Course</span><span>Credits</span><span>Grade</span><span>FSU Status</span></div>`;
+    p.areas.forEach(a=>{body+=`<div class="area-label">${a.areaLabel}</div>`;if(a.advFlag)body+=advFlagHTML(a.advFlag);a.courses.forEach(c=>{body+=crow(c,false,false);});});
+  } else if(isCFKArt){
+    body=`<div class="col-hdr"><span></span><span>Course</span><span>Credits</span><span>Grade</span><span>Status</span></div>`;
+    p.areas.forEach(a=>{body+=`<div class="area-label">${a.areaLabel}</div>`;if(a.advFlag)body+=advFlagHTML(a.advFlag);a.courses.forEach(c=>{body+=crow(c,false,false);});});
+  } else {
+    body=`<div class="col-hdr"><span></span><span>${isCL?'Milestone':'Course'}</span><span>${isPhle?'Hours':isCL?'':'Credits'}</span><span>${isCL?'':'Grade'}</span><span>Status</span></div>`;
+    p.areas.forEach(a=>{body+=`<div class="area-label">${a.areaLabel}</div>`;if(a.advFlag)body+=advFlagHTML(a.advFlag);a.courses.forEach(c=>{body+=crow(c,isPhle,isCL);});});
+  }
+  const sec=document.createElement('div');
+  sec.className='section';sec.id='sec-'+pid;
+  const flagBanner=pid==='tx'?`<div class="credit-flag" id="credit-flag-banner">
+    <div class="credit-flag-icon">⚠️</div>
+    <p>Reyna has reached 30 credits! It's time to verify FSU's transfer application deadline and start the application — her advisor can help with both. Don't wait too long — engineering programs fill up fast! 🚀</p>
+  </div>`:'';
+  sec.innerHTML=`
+    <div class="sec-hdr" onclick="togSec('${pid}')">
+      <div class="sec-title"><span class="sec-icon" aria-hidden="true">${p.icon}</span> ${p.label} <span class="badge ${p.badge}">${p.badgeText}</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span class="sec-complete-badge" id="complete-badge-${pid}">✓ Complete!</span><span class="sec-meta" id="meta-${pid}"></span><span class="chevron">▾</span></div>
+    </div>
+    <div class="sec-body">
+      ${flagBanner}
+      ${p.advFlag?advFlagHTML(p.advFlag):''}
+      ${p.advFlag2?advFlagHTML(p.advFlag2):''}
+      ${body}
+      <div class="req-note">💡 ${p.note}</div>
+      <div class="notes-wrap"><label>My notes</label><textarea rows="2" placeholder="Write anything here..." onchange="saveNote('${pid}',this.value)">${state['note_'+pid]||''}</textarea></div>
+    </div>`;
+  return sec;
+}
+
+/* ── INSTITUTION BANNER ── */
+function instBanner(variant,emoji,title,sub,badgeText,badgeCls,progressHTML){
+  return `<div class="inst-banner ${variant}">
+    <div class="inst-icon" aria-hidden="true">${emoji}</div>
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">
+        <div class="inst-title">${title}</div>
+        <span class="inst-badge ${badgeCls}">${badgeText}</span>
+      </div>
+      <div class="inst-sub">${sub}</div>
+      ${progressHTML||''}
+    </div>
+  </div>`;
+}
+
+/* ── PA PHASE TOGGLE ── */
+function togglePASection(){
+  const wrap=document.getElementById('pa-collapsible-wrap');
+  const btn=document.getElementById('pa-toggle-btn');
+  if(!wrap) return;
+  const isHidden=wrap.classList.toggle('pa-hidden');
+  state['pa_collapsed']=isHidden;
+  persist(state);
+  if(btn) btn.textContent=isHidden?'▼ Show':'▲ Hide';
+}
+
+/* ── PA BOTTOM TOGGLE ── */
+function togglePABottom(){
+  const wrap=document.getElementById('pa-bottom-wrap');
+  const btn=document.getElementById('pa-bottom-btn');
+  if(!wrap) return;
+  const isHidden=wrap.classList.toggle('tx-hidden');
+  state['pa_bottom_collapsed']=isHidden;
+  persist(state);
+  if(btn) btn.textContent=isHidden?'▼ Show':'▲ Hide';
+}
+
+/* ── TX SECTION TOGGLE ── */
+function toggleTXSection(){
+  const wrap=document.getElementById('tx-collapsible-wrap');
+  const btn=document.getElementById('tx-toggle-btn');
+  if(!wrap) return;
+  const isHidden=wrap.classList.toggle('tx-hidden');
+  state['tx_collapsed']=isHidden;
+  persist(state);
+  if(btn) btn.textContent=isHidden?'▼ Show':'▲ Hide';
+}
+
+/* ── FSU PHASE TOGGLE ── */
+function toggleFSUPhase(){
+  const wrap=document.getElementById('fsu-collapsible-wrap');
+  const btn=document.getElementById('fsu-toggle-btn');
+  if(!wrap) return;
+  const isHidden=wrap.classList.toggle('fsu-hidden');
+  state['fsu_phase_collapsed']=isHidden;
+  persist(state);
+  if(btn) btn.textContent=isHidden?'▼ Show':'▲ Hide';
+}
+
+/* ── JOURNEY MAP ── */
+function journeyStep(emoji, status, title){
+  return `<div class="jt-step ${status}" title="${title}">${emoji}</div>`;
+}
+function journeyConnector(done){
+  return `<div class="jt-connector ${done?'jt-conn-done':'jt-conn-plan'}"></div>`;
+}
+
+function renderJourneyMap(){
+  const el=document.getElementById('journey-tracks');
+  if(!el) return;
+
+  // Helper: get step status
+  function st(id){
+    const s=getS(id);
+    if(s.done) return 'done';
+    if(s.grade==='IP') return 'inprog';
+    return 'planned';
+  }
+
+  const tracks=[
+    {
+      label:'✍️ Writing',
+      steps:[
+        {emoji:'📝',id:'w0',title:'Developmental Writing I'},
+        {emoji:'📖',id:'pa6r',title:'Developmental Reading I'},
+        {emoji:'✏️',id:'w2',title:'ENC 1101 — English Comp I'},
+        {emoji:'📚',id:'w3',title:'ENC 1102 — English Comp II'},
+        {emoji:'🖊️',id:'w4',title:'CRW 2100 — Fiction Writing'},
+      ]
+    },
+    {
+      label:'🔢 Math',
+      steps:[
+        {emoji:'➕',id:'m2',title:'MAT 1033 — Intermediate Algebra'},
+        {emoji:'📐',id:'m3',title:'MAC 1105 — College Algebra'},
+        {emoji:'🔭',id:'m5',title:'MAC 1147 — Pre-Calc/Trig'},
+        {emoji:'🚀',id:'m6',title:'MAC 2311 — Calculus I ★'},
+        {emoji:'⚡',id:'m7',title:'MAC 2312 — Calculus II ★'},
+      ]
+    },
+    {
+      label:'🔬 Science',
+      steps:[
+        {emoji:'🫀',id:'s1',title:'BSC 1085 — A&P I'},
+        {emoji:'🫀',id:'s2',title:'BSC 1086 — A&P II'},
+        {emoji:'🧬',id:'s3',title:'BSC 1010 — Biology I'},
+        {emoji:'⚗️',id:'s5',title:'CHM 1045 — Gen Chem I'},
+        {emoji:'🧪',id:'s6',title:'CHM 1046 — Gen Chem II'},
+        {emoji:'🧬',id:'s4',title:'BSC 1011 — Biology II'},
+        {emoji:'🧬',id:'s7',title:'BSC 2010 — Bio Science I'},
+      ]
+    },
+    {
+      label:'🎨 Art',
+      steps:[
+        {emoji:'🏺',id:'ar0',title:'REC 0190 — Ceramics Wheel (done)'},
+        {emoji:'🏺',id:'ar1',title:'REC 0183 — Ceramics Hand (done)'},
+        {emoji:'✏️',id:'ar2',title:'ART 1300C — Beginning Drawing'},
+        {emoji:'🫙',id:'ar3',title:'ART 1750C — Ceramics I',tbd:true},
+        {emoji:'🎭',id:'ar4',title:'ART 1754C — Ceramics II',tbd:true},
+        {emoji:'🌀',id:'ar5',title:'ART 2752C — Wheel Throwing I'},
+      ]
+    },
+    {
+      label:'💉 Phlebotomy',
+      steps:[
+        {emoji:'🏥',id:'ph1',title:'HSC 0003C — Health Care Worker'},
+        {emoji:'💉',id:'ph2',title:'MEA 0520C — Phlebotomist'},
+      ]
+    },
+    {
+      label:'📚 Electives',
+      steps:[
+        {emoji:'🌟',id:'aa12',title:'AST 1002 — Astronomy'},
+        {emoji:'🏛️',id:'aa18',title:'SLS 2930 — Career Seminar'},
+        {emoji:'🌍',id:'aa15',title:'POS 1041 — National Government'},
+        {emoji:'🧠',id:'aa17',title:'DEP 2004 — Human Growth'},
+        {emoji:'📖',id:'aa4',title:'ARH 1000 — Art Appreciation'},
+        {emoji:'🎭',id:'aa28',title:'SLS 1101 — College Success'},
+        {emoji:'🧬',id:'aa31',title:'BSC 1085 — A&P I'},
+        {emoji:'🧬',id:'aa33',title:'BSC 1010 — Biology I'},
+        {emoji:'🧬',id:'aa25',title:'BSC 2010 — Bio Science I'},
+      ]
+    },
+  ];
+
+  el.innerHTML=tracks.map(track=>{
+    const steps=track.steps.map((step,i)=>{
+      const s=getS(step.id);
+      let status=step.fsu?'fsu':step.tbd?'tbd':s.done?'done':s.grade==='IP'?'inprog':'planned';
+      // Override for building blocks
+      if(step.id==='ar0'||step.id==='ar1') status='done';
+      const conn=i<track.steps.length-1?journeyConnector(s.done):'';
+      return journeyStep(step.emoji,status,step.title)+conn;
+    }).join('');
+    return `<div class="journey-track">
+      <div class="jt-label">${track.label}</div>
+      <div class="jt-bar">${steps}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ── RENDER ── */
+function render(){
+  ['inst-pa','inst-cfk','inst-fsu'].forEach(id=>{
+    const el=document.getElementById(id);if(el) el.innerHTML='';
+  });
+
+  /* ══ PHASE 1 — PROJECT ACCESS ══ */
+  const paEl=document.getElementById('inst-pa');
+  const paAll=programs.find(p=>p.id==='pa').areas.flatMap(a=>a.courses);
+  const paDone=paAll.filter(c=>getS(c.id).done).length;
+  const paPct=Math.round(paDone/paAll.length*100);
+  const paCollapsed=state['pa_collapsed']===true;
+  paEl.innerHTML=`<div class="inst-divider" style="display:flex;align-items:center">
+    <span>Phase 1 — CFK Project ACCESS</span>
+    <button class="inst-collapse-btn" onclick="togglePASection()" id="pa-toggle-btn">${paCollapsed?'▼ Show':'▲ Hide'}</button>
+  </div>`;
+  paEl.innerHTML+=instBanner(
+    paDone===paAll.length?'complete':'active','⭐',
+    'CFK — Project ACCESS',
+    'College of the Florida Keys &nbsp;·&nbsp; Building the foundation for college life, independence, and career',
+    paDone===paAll.length?'✓ Complete':'In Progress',
+    paDone===paAll.length?'ib-done':'ib-now',
+    `<div class="inst-progress">
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">
+        <span>${paDone} of ${paAll.length} courses done</span><span>${paPct}%</span>
+      </div>
+      <div style="background:var(--border);border-radius:99px;height:7px;overflow:hidden">
+        <div style="height:100%;border-radius:99px;background:#52C98A;width:${paPct}%;transition:width .5s"></div>
+      </div>
+    </div>`
+  );
+  const paWrap=document.createElement('div');
+  paWrap.className='pa-collapsible'+(paCollapsed?' pa-hidden':'');
+  paWrap.id='pa-collapsible-wrap';
+  paEl.appendChild(paWrap);
+
+  /* ══ PHASE 2 — CFK AA + PREREQS ══ */
+  const cfkEl=document.getElementById('inst-cfk');
+  let aaC=0;
+  programs.find(p=>p.id==='aa').areas.forEach(a=>a.courses.forEach(c=>{
+    const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));
+  }));
+  mathSeq.forEach(c=>{if(!c.devEd){const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  aaC=Math.min(60,aaC);
+  const aaPct=Math.min(100,Math.round(aaC/60*100));
+  const flagEl=document.getElementById('credit-flag-banner');
+  if(flagEl){
+    const flag30=aaC>=30&&(!getS('tx0a').done||!getS('tx0b').done);
+    flagEl.classList.toggle('show',flag30);
+  }
+  const mDone=mathSeq.filter(c=>getS(c.id).done).length;
+  cfkEl.innerHTML=`<div class="inst-divider">Phase 2 — College of the Florida Keys</div>`;
+  cfkEl.innerHTML+=instBanner(
+    'active','🎓',
+    'CFK — AA Degree & Transfer Prerequisites',
+    'College of the Florida Keys &nbsp;·&nbsp; Earning the AA and preparing to transfer to FSU Chemical Engineering',
+    'In Progress',
+    'ib-now',
+    `<div class="inst-progress">
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">
+        <span>AA Credits: ${aaC} / 60</span><span>${aaPct}%</span>
+      </div>
+      <div style="background:var(--border);border-radius:99px;height:7px;overflow:hidden;margin-bottom:6px">
+        <div style="height:100%;border-radius:99px;background:#3B82F6;width:${aaPct}%;transition:width .5s"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">
+        <span>Math Journey: ${mDone} / ${mathSeq.length} steps</span><span>${Math.round(mDone/mathSeq.length*100)}%</span>
+      </div>
+      <div style="background:var(--border);border-radius:99px;height:7px;overflow:hidden">
+        <div style="height:100%;border-radius:99px;background:#FFB347;width:${Math.round(mDone/mathSeq.length*100)}%;transition:width .5s"></div>
+      </div>
+    </div>`
+  );
+  // Render all CFK sections except tx separately
+  ['write','art','sci','math','aa','cfkart','phle','pa','certs'].forEach(pid=>{const s=buildSection(pid);if(s)cfkEl.appendChild(s);});
+
+  // Project ACCESS & Certifications — collapsible at bottom of CFK
+  const paBottomCollapsed=state['pa_bottom_collapsed']===true;
+  const paDivider=document.createElement('div');
+  paDivider.style.cssText='display:flex;align-items:center;gap:12px;margin:.75rem 0 .5rem;color:var(--text3);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase';
+  paDivider.innerHTML=`<span style="flex:1;height:2px;background:var(--border);border-radius:2px;display:block"></span>
+    <span>Project ACCESS & Certifications</span>
+    <button class="inst-collapse-btn" onclick="togglePABottom()" id="pa-bottom-btn">${paBottomCollapsed?'▼ Show':'▲ Hide'}</button>
+    <span style="flex:1;height:2px;background:var(--border);border-radius:2px;display:block"></span>`;
+  cfkEl.appendChild(paDivider);
+  const paBottomWrap=document.createElement('div');
+  paBottomWrap.id='pa-bottom-wrap';
+  paBottomWrap.className='tx-collapsible'+(paBottomCollapsed?' tx-hidden':'');
+  ['pa','certs'].forEach(pid=>{const s=buildSection(pid);if(s)paBottomWrap.appendChild(s);});
+  cfkEl.appendChild(paBottomWrap);
+
+  // Transfer Checklist — with manual collapse toggle
+  const txCollapsed=state['tx_collapsed']===true;
+  const txDivider=document.createElement('div');
+  txDivider.style.cssText='display:flex;align-items:center;gap:12px;margin:.75rem 0 .5rem;color:var(--text3);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase';
+  txDivider.innerHTML=`<span style="flex:1;height:2px;background:var(--border);border-radius:2px;display:block"></span>
+    <span>Transfer Checklist</span>
+    <button class="inst-collapse-btn" onclick="toggleTXSection()" id="tx-toggle-btn">${txCollapsed?'▼ Show':'▲ Hide'}</button>
+    <span style="flex:1;height:2px;background:var(--border);border-radius:2px;display:block"></span>`;
+  cfkEl.appendChild(txDivider);
+
+  const txWrap=document.createElement('div');
+  txWrap.className='tx-collapsible'+(txCollapsed?' tx-hidden':'');
+  txWrap.id='tx-collapsible-wrap';
+  const txSec=buildSection('tx');
+  if(txSec) txWrap.appendChild(txSec);
+  cfkEl.appendChild(txWrap);
+
+  /* ══ PHASE 3 — FSU ══ */
+  const fsuEl=document.getElementById('inst-fsu');
+  const fsuAll=programs.find(p=>p.id==='fsu').areas.flatMap(a=>a.courses);
+  const fsuDone=fsuAll.filter(c=>getS(c.id).done).length;
+  const fsuCollapsed=state['fsu_phase_collapsed']===true;
+  fsuEl.innerHTML=`<div class="inst-divider" style="display:flex;align-items:center">
+    <span>Phase 3 — Florida State University</span>
+    <button class="inst-collapse-btn" onclick="toggleFSUPhase()" id="fsu-toggle-btn">${fsuCollapsed?'▼ Show':'▲ Hide'}</button>
+  </div>`;
+  fsuEl.innerHTML+=instBanner(
+    'future','🏛️',
+    'Florida State University',
+    'FAMU-FSU College of Engineering &nbsp;·&nbsp; Bachelor of Science in Chemical Engineering',
+    'Next Chapter',
+    'ib-next',
+    `<div class="inst-progress">
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">
+        <span>${fsuDone} of ${fsuAll.length} courses/milestones ready</span><span>Unlocked after AA transfer ✈️</span>
+      </div>
+      <div style="background:var(--border);border-radius:99px;height:7px;overflow:hidden">
+        <div style="height:100%;border-radius:99px;background:#7C3AED;width:${Math.round(fsuDone/fsuAll.length*100)}%;transition:width .5s"></div>
+      </div>
+    </div>`
+  );
+  const fsuWrap=document.createElement('div');
+  fsuWrap.className='fsu-collapsible'+(fsuCollapsed?' fsu-hidden':'');
+  fsuWrap.id='fsu-collapsible-wrap';
+  ['fsu'].forEach(pid=>{const s=buildSection(pid);if(s)fsuWrap.appendChild(s);});
+  fsuEl.appendChild(fsuWrap);
+
+  metas();
+}
+render();
+renderMetrics();
+</script>
+</body>
+</html>
