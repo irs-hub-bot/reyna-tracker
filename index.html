@@ -257,6 +257,8 @@ body.dyslexic .cname{line-height:1.9}
 @keyframes pulse-blue{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.3)}50%{box-shadow:0 0 0 5px rgba(59,130,246,0)}}
 @media(max-width:600px){.jt-label{width:60px;font-size:10px}.jt-step{width:28px;height:28px;font-size:11px}.jt-connector{max-width:10px}}
 
+.fsu-opt-badge{font-size:10px;font-weight:700;color:#5B21B6;background:#F0EEFF;padding:2px 8px;border-radius:99px;border:1px solid #C9C1F5;white-space:nowrap;display:inline-block;margin-top:3px}
+
 /* ADVISOR FLAG */
 .adv-flag{background:var(--sky);border:2px solid var(--sky2);border-radius:var(--rsm);padding:.65rem 1rem;margin:.75rem 1.25rem 0;display:flex;align-items:flex-start;gap:10px}
 .adv-flag-icon{font-size:18px;flex-shrink:0;margin-top:1px}
@@ -372,7 +374,7 @@ body.dyslexic .cname{line-height:1.9}
   <div class="hdr">
     <div class="stars" aria-hidden="true">🌟 🎓 🌟</div>
     <h1>Reyna's <span>Journey</span> Tracker</h1>
-    <p>CFK Project ACCESS &nbsp;→&nbsp; CFK AA Degree &nbsp;→&nbsp; FSU Chemical Engineering BS &nbsp;·&nbsp; Every step forward is a win 💜</p>
+    <p>CFK Project ACCESS &nbsp;→&nbsp; CFK AA Degree &nbsp;→&nbsp; FSU Biomedical Engineering BS &nbsp;·&nbsp; Every step forward is a win 💜</p>
   </div>
 
   <div class="toolbar">
@@ -417,7 +419,7 @@ body.dyslexic .cname{line-height:1.9}
 <div class="save-bar" id="savebar">✓ Progress saved! 🎉</div>
 
 <script>
-const SK='reyna_v4';
+const SK='reyna_v5'; // bumped to v5 to clear stale localStorage
 
 /* ── font toggle ── */
 if(localStorage.getItem('reyna_font')==='dyslexic') document.body.classList.add('dyslexic');
@@ -485,13 +487,14 @@ const artSeq=[
 
 // Science Part A — complete at CFK
 const sciSeqA=[
-  {id:'s1',code:'BSC 1085',name:'Anatomy & Physiology I',credits:3,type:'ap',phle:true,semester:'Fall 2026',stepLabel:'Step 1 of 7'},
-  {id:'s2',code:'BSC 1086',name:'Anatomy & Physiology II',credits:3,type:'ap',phle:true,semester:'Spring 2027',stepLabel:'Step 2 of 7'},
-  {id:'s3',code:'BSC 1010',name:'Principles of Biology I',credits:3,type:'bio',semester:'Summer 2027',stepLabel:'Step 3 of 7'},
-  {id:'s5',code:'CHM 1045',name:'General Chemistry I with Lab',credits:3,type:'chem',semester:'Fall 2027',stepLabel:'Step 4 of 7',fsu:'encouraged'},
-  {id:'s6',code:'CHM 1046',name:'General Chemistry II with Lab',credits:3,type:'chem',semester:'Summer 2028',stepLabel:'Step 5 of 7',fsu:'encouraged'},
-  {id:'s4',code:'BSC 1011',name:'Principles of Biology II',credits:3,type:'bio',semester:'Fall 2028',stepLabel:'Step 6 of 7'},
-  {id:'s7',code:'BSC 2010',name:'Biological Science I',credits:3,type:'bio',semester:'Summer 2028',stepLabel:'Step 7 of 7',fsu:'recommended'},
+  {id:'s1',code:'BSC 1085',name:'Anatomy & Physiology I',credits:3,type:'ap',phle:true,semester:'Fall 2026',stepLabel:'Step 1 of 4'},
+  {id:'s1L',code:'BSC 1085L',name:'A&P I Lab — co-req with BSC 1085',credits:1,type:'ap',phle:true,semester:'Fall 2026',stepLabel:'Lab'},
+  {id:'s2',code:'BSC 1086',name:'Anatomy & Physiology II',credits:3,type:'ap',phle:true,semester:'Spring 2027',stepLabel:'Step 2 of 4'},
+  {id:'s2L',code:'BSC 1086L',name:'A&P II Lab — co-req with BSC 1086',credits:1,type:'ap',phle:true,semester:'Spring 2027',stepLabel:'Lab'},
+  {id:'s5',code:'CHM 1045',name:'General Chemistry I',credits:3,type:'chem',semester:'Fall 2027',stepLabel:'Step 3 of 4',fsu:'encouraged'},
+  {id:'s5L',code:'CHM 1045L',name:'General Chemistry I Lab — co-req with CHM 1045',credits:1,type:'chem',semester:'Fall 2027',stepLabel:'Lab'},
+  {id:'s6',code:'CHM 1046',name:'General Chemistry II',credits:3,type:'chem',semester:'Spring 2028',fsuNote:'Prereq for Organic Chemistry at FSU',stepLabel:'Step 4 of 4',fsu:'encouraged'},
+  {id:'s6L',code:'CHM 1046L',name:'General Chemistry II Lab — co-req with CHM 1046',credits:1,type:'chem',semester:'Spring 2028',stepLabel:'Lab'},
 ];
 const sciSeqB=[
   {id:'s8',code:'PHY 2048C',name:'General Physics A with Lab',credits:5,type:'fsu',semester:'FSU Year 1',stepLabel:'Step 1 of 4 ★',fsu:'bsdegree'},
@@ -505,13 +508,14 @@ const mathSeqA=[
   {id:'m2',code:'MAT 1033',name:'Intermediate Algebra',credits:4,found:true,stepLabel:'Step 1 of 5',semester:'Fall 2026',xfer:'verify'},
   {id:'m3',code:'MAC 1105',name:'College Algebra',credits:3,found:true,stepLabel:'Step 2 of 5',semester:'Spring 2027',xfer:'yes'},
   {id:'m5',code:'MAC 1147',name:'Pre-Calculus / Trigonometry',credits:4,found:true,stepLabel:'Step 3 of 5',semester:'Fall 2027',xfer:'yes'},
-  {id:'m6',code:'MAC 2311',name:'Calculus I — MAC 2311',credits:4,req:true,priority:true,stepLabel:'Step 4 of 5 ★',semester:'Spring 2028',xfer:'yes',fsu:'required',fsuNote:'⭐ C- or better required — must complete to enroll at FSU ChemE'},
-  {id:'m7',code:'MAC 2312',name:'Calculus II — MAC 2312',credits:4,req:true,priority:true,stepLabel:'Step 5 of 5 ★',semester:'Fall 2028',xfer:'yes',fsu:'encouraged',fsuNote:'★ Strongly encouraged before transfer — required for BS degree'},
+  {id:'m6',code:'MAC 2311',name:'Calculus I — MAC 2311',credits:4,req:true,priority:true,stepLabel:'Step 4 of 4 ★',semester:'Spring 2028',xfer:'yes',fsu:'required',fsuNote:'⭐ C- or better required — must complete to enroll at FSU ChemE'},
+
 ];
 // Math Part B — complete at FSU (upper-level math for BS degree)
 const mathSeqB=[
-  {id:'m8',code:'MAC 2313',name:'Calculus III — MAC 2313',credits:4,req:true,priority:true,stepLabel:'Step 1 of 2 ★',xfer:'yes',fsu:'bsdegree',fsuNote:'Required for BS degree — taken at FSU',semester:'Spring 2029'},
-  {id:'m9',code:'MAP 2302',name:'Differential Equations — MAP 2302',credits:3,req:true,priority:true,stepLabel:'Step 2 of 2 ★',xfer:'yes',fsu:'bsdegree',fsuNote:'Required for BS degree — FSU only accepts MAP 2302 or MAP 2305',semester:'Fall 2029'},
+  {id:'m7',code:'MAC 2312',name:'Calculus II — MAC 2312',credits:4,req:true,priority:true,stepLabel:'Step 1 of 3 ★',fsu:'required',fsuNote:'Continue math sequence at FSU — required for Biomedical Engineering BS'},
+  {id:'m8',code:'MAC 2313',name:'Calculus III — MAC 2313',credits:4,req:true,priority:true,stepLabel:'Step 2 of 3 ★',xfer:'yes',fsu:'bsdegree',fsuNote:'Required for BS degree — taken at FSU',semester:'Spring 2029'},
+  {id:'m9',code:'MAP 2302',name:'Differential Equations — MAP 2302',credits:3,req:true,priority:true,stepLabel:'Step 3 of 3 ★',xfer:'yes',fsu:'bsdegree',fsuNote:'Required for BS degree — FSU only accepts MAP 2302 or MAP 2305',semester:'Fall 2029'},
 ];
 // Combined for legacy references
 const mathSeq=[...mathSeqA,...mathSeqB];
@@ -535,7 +539,7 @@ const programs=[
   {id:'art',label:'Art Journey 🎨',badge:'b-cert',badgeText:'4 steps + FSU',icon:'🎨',isArtJourney:true,
    note:"Reyna's art journey started long before college — her ceramics work in 2026 is the foundation. The 4 selected CFK courses transfer to FSU under Florida's SCNS and satisfy the 12-credit Studio Art Minor requirement. Building blocks shown at the top honor where this journey really began! 🏺",
    areas:[{courses:artSeq}]},
-  {id:'sci',label:'Science Journey',badge:'b-phle',badgeText:'7+4 steps',icon:'🔬',isSci:true,
+  {id:'sci',label:'Science Journey',badge:'b-phle',badgeText:'4+4 steps',icon:'🔬',isSci:true,
    note:'Your Science Journey runs alongside your math path — biology first to build the foundation, then chemistry to unlock your engineering transfer. The A&P courses also support your Phlebotomy Technician Certificate. Part B continues at FSU with Physics and Organic Chemistry.',
    areas:[{courses:[...sciSeqA,...sciSeqB]}]},
   {id:'write',label:'Writing & English Journey',badge:'b-aa',badgeText:'5 steps',icon:'✍️',isWrite:true,
@@ -545,9 +549,9 @@ const programs=[
     {id:'pa6r',code:'REA 0007',name:'Developmental Reading I',credits:3,devEd:true,done2526:true,stepLabel:'Done ✓ Spring 2026',xfer:'dev',semester:'Spring 2026',fsuNote:'3 credit hours on transcript — 0.00 quality points (does not count toward GPA or AA 60-credit total)'},
     {id:'w2',code:'ENC 1101',name:'English Composition I',credits:3,req:true,xfer:'yes',stepLabel:'Step 1 of 3 ★',semester:'Fall 2026',fsuNote:'Required for AA Area I — C or higher required'},
     {id:'w3',code:'ENC 1102',name:'English Composition II',credits:3,req:true,xfer:'yes',stepLabel:'Step 2 of 3 ★',semester:'Spring 2027',fsuNote:'Required for AA Area I — C or higher required'},
-    {id:'w4',code:'CRW 2100',name:'Beginning Fiction Writing',credits:3,xfer:'yes',stepLabel:'Step 3 of 3',semester:'Fall 2028',fsuNote:'Satisfies AA Area II Humanities requirement'},
+    {id:'w4',code:'CRW 2100',name:'Beginning Fiction Writing',credits:3,xfer:'yes',stepLabel:'Step 3 of 3',semester:'Fall 2027',fsuNote:'Area II already satisfied by ARH 1000 — can be taken at FSU as an elective',fsuNote:'Satisfies AA Area II Humanities requirement'},
    ]}]},
-  {id:'math',label:'Math Journey',badge:'b-math',badgeText:'5+2 steps',icon:'🔢',isMath:true,
+  {id:'math',label:'Math Journey',badge:'b-math',badgeText:'4+3 steps',icon:'🔢',isMath:true,
    note:'This is your math path from the very beginning all the way to Calculus. Go one step at a time — there is absolutely no rush. Each course you finish unlocks the next one. You already completed Developmental Writing this year — that same determination will carry you all the way through! 🌟',
    areas:[{areaLabel:'Your complete math pathway — one step at a time',courses:mathSeq}]},
   {id:'aa',label:'AA Degree',badge:'b-aa',badgeText:'60 credits',icon:'🎓',
@@ -559,7 +563,7 @@ const programs=[
     ]},
     {areaLabel:'Area II — Humanities (6 credits)',advFlag:'adv-ii',courses:[
       {id:'aa4',code:'ARH 1000',name:'Art Appreciation',credits:3,xfer:'yes',semester:'Spring 2027'},
-      {id:'aa6',code:'CRW 2100',name:'Beginning Fiction Writing — tracked in Writing Journey',credits:3,xfer:'yes',semester:'Fall 2028'},
+      {id:'aa6',code:'CRW 2100',name:'Beginning Fiction Writing — tracked in Writing Journey',credits:3,xfer:'yes',semester:'Fall 2027'},
     ]},
     {areaLabel:'Area III — Math (filled by your Math Journey above)',courses:[
       {id:'aa3m',code:'See Math Journey',name:'College Algebra — MAC 1105 counts here (Step 2)',credits:3,xfer:'yes'},
@@ -609,10 +613,10 @@ const programs=[
     {id:'ph2',code:'MEA 0520C',name:'Phlebotomist',clockHours:75,req:true,note:'💡 Clinical skills that complement the biochemistry path'},
    ]}]},
   {id:'fsu',label:"FSU Bachelor's — Upper Division",badge:'b-chem',badgeText:'At FSU',icon:'🏛️',isFSU:true,
-   note:"These courses are completed AT Florida State University after Reyna transfers. They cannot be taken at CFK. This section shows the full picture of the Chemical Engineering BS degree so nothing is a surprise when she arrives. All 3000- and 4000-level chemistry courses must be taken at FSU.",
+   note:"These courses are completed AT Florida State University after Reyna transfers. The Studio Art Minor (12 credits) will also be completed at FSU. Note: BSC 2010 (Biological Science I) must be completed at FSU — it is required for the BME degree and should be taken in Term 1. Reyna's ceramics building blocks from CFK (REC 0190 and REC 0183) are a wonderful foundation for the Studio Art Minor. They cannot be taken at CFK. This section shows the full picture of the Biomedical Engineering BS degree so nothing is a surprise when she arrives.",
    areas:[
     {areaLabel:'FSU Term 1 — Fall (Junior Year — first semester at FSU) 🚀',courses:[
-      {id:'fsu1',code:'EGN 1004L',name:'First Year Engineering Lab ★ Take first semester!',credits:1,fsuOnly:true,fsuNote:'C- required — FSU only. Transfer students must enroll first semester. Required to declare Chemical Engineering major.'},
+      {id:'fsu1',code:'EGN 1004L',name:'First Year Engineering Lab ★ Take first semester!',credits:1,fsuOnly:true,fsuNote:'C- required — FSU only. Transfer students must enroll first semester. Required to declare Biomedical Engineering major.'},
       {id:'fsu2',code:'ECH 3023',name:'Mass and Energy Balances I — your first real ChemE course! 🎉',credits:3,fsuOnly:true,fsuNote:'Requires CHM 1045 + MAC 2311 — both completed at CFK. Reyna is ready for this on day one!'},
       {id:'fsu3',code:'MAC 2313',name:'Calculus III (if not completed at CFK)',credits:5,fsu:'bsdegree',fsuNote:'Complete at CFK if possible — tracked in Math Journey Part B'},
       {id:'fsu4',code:'CHM 2210',name:'Organic Chemistry I',credits:3,fsuOnly:true,fsuNote:'Requires CHM 1045 + CHM 1046 — both completed at CFK'},
@@ -664,10 +668,6 @@ const programs=[
     {id:'cfa2',code:'ART 1750C',name:'Ceramics I — Hand Building, Firing and Glazing',credits:3,xfer:'yes',semester:'Fall 2027',fsuNote:"Natural starting point given Reyna's ceramics background — Lab fee $75"},
     {id:'cfa3',code:'ART 1754C',name:'Ceramics II',credits:3,xfer:'yes',semester:'Spring 2028',fsuNote:'Prerequisite: ART 1750C with grade C or higher — Lab fee $120'},
     {id:'cfa6',code:'ART 2752C',name:'Wheel Throwing I',credits:3,xfer:'yes',semester:'Summer 2028',fsuNote:'Prerequisite: ART 1750C with grade C or higher — Lab fee $85'},
-   ]},{areaLabel:'Optional Additional Courses (if she wants to explore further)',courses:[
-    {id:'cfa4',code:'ART 2001C',name:'Creative Expression',credits:3,xfer:'yes',fsuNote:'Optional — traditional and unconventional art forms'},
-    {id:'cfa5',code:'ART 2554C',name:'Beginning Oil Painting',credits:3,xfer:'yes',fsuNote:'Optional — students provide supplies'},
-    {id:'cfa7',code:'ART 2772C',name:'Raku',credits:3,xfer:'yes',fsuNote:'Optional — Lab fee $120'},
    ]}]},
   {id:'tx',label:'Transfer Checklist 🚀',badge:'b-chem',badgeText:'University Transfer',icon:'🚀',isChecklist:true,
    note:'These are the big milestones before you apply to a university engineering program. You do not need to worry about all of these right now — just focus on your courses one at a time. When the time comes, your advisor and Vocational Rehabilitation counselor will help you check every single one of these off!',
@@ -688,7 +688,7 @@ const programs=[
 ];
 
 /* ── STATE ── */
-function load(){try{return JSON.parse(localStorage.getItem(SK))||{};}catch{return{}}}
+function load(){try{const d=JSON.parse(localStorage.getItem(SK));return d||{};}catch{return{}}}
 function persist(s){
   try{localStorage.setItem(SK,JSON.stringify(s));}catch{}
   const b=document.getElementById('savebar');
@@ -725,11 +725,18 @@ let state=load();
   ['pa6', {done:true,grade:'A.',credits:3}],  // REA 0007 Developmental Reading
   ['pa7', {done:true,grade:'A',credits:2}],   // SLS 2950 Professional Portfolio
   ['aa18',{done:true,grade:'A',credits:3}],   // SLS 2930 Career Seminar — Summer 2026 grade A
-].forEach(([id,v])=>{if(!state[id]){state[id]=v;persist(state);}});
+].forEach(([id,v])=>{
+  // Always override with transcript data — localStorage cannot override verified grades
+  state[id]={...state[id],...v};
+  persist(state);
+});
 function getS(id){return state[id]||{done:false,grade:'',credits:null}}
 function allC(prog){return prog.areas.flatMap(a=>a.courses)}
 
 /* ── METRICS ── */
+function earnedCr(s,c){return s.done===true&&s.grade!=='IP'&&!c.devEd&&(c.credits||0)>0;}
+function earnedCrById(id,cr){const s=getS(id);return s.done===true&&s.grade!=='IP'?cr:0;}
+
 function navTo(pid){
   // Expand phase wrappers if needed
   const paWrap=document.getElementById('pa-collapsible-wrap');
@@ -751,10 +758,14 @@ function djDot(status){return `<div class="dj-dot ${status}"></div>`;}
 function renderMetrics(){
   // AA credits
   let aaC=0;
+  // Only count courses where done===true AND grade is not IP (fully completed with a grade)
   programs.find(p=>p.id==='aa').areas.forEach(a=>a.courses.forEach(c=>{
-    const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));
+    const s=getS(c.id);if(earnedCr(s,c)) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));
   }));
-  mathSeqA.forEach(c=>{if(!c.devEd){const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  mathSeqA.forEach(c=>{if(!c.devEd&&(c.credits||0)>0){const s=getS(c.id);if(earnedCr(s,c)) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  sciSeqA.forEach(c=>{if((c.credits||0)>0){const s=getS(c.id);if(earnedCr(s,c)) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  // SLS courses not in AA program areas — add directly (pa=Project ACCESS courses)
+  [{id:'pa1',cr:2},{id:'pa2',cr:2},{id:'pa3',cr:2},{id:'pa4',cr:1},{id:'pa5',cr:2},{id:'pa7',cr:2}].forEach(({id,cr})=>{aaC+=earnedCrById(id,cr);});
   aaC=Math.min(60,aaC);
   const aaPct=Math.min(100,Math.round(aaC/60*100));
 
@@ -765,10 +776,11 @@ function renderMetrics(){
   const mDots=mathSeqA.map(c=>{const s=getS(c.id);return djDot(s.done?'done':s.grade==='IP'?'inprog':'plan');}).join('');
 
   // Science Part A (CFK only)
-  const sTotal=sciSeqA.length;
-  const sDone=sciSeqA.filter(c=>getS(c.id).done).length;
+  const sciSteps=sciSeqA.filter(c=>!c.code.endsWith('L')&&c.id!=='s1L'&&c.id!=='s2L'&&c.id!=='s5L'&&c.id!=='s6L');
+  const sTotal=sciSteps.length;
+  const sDone=sciSteps.filter(c=>getS(c.id).done).length;
   const sPct=Math.round(sDone/sTotal*100);
-  const sDots=sciSeqA.map((c,i)=>{const s=getS(c.id);if(i===0&&!s.done)return djDot('inprog');return djDot(s.done?'done':s.grade==='IP'?'inprog':'plan');}).join('');
+  const sDots=sciSteps.map((c,i)=>{const s=getS(c.id);if(i===0&&!s.done)return djDot('inprog');return djDot(s.done?'done':s.grade==='IP'?'inprog':'plan');}).join('');
 
   // Writing
   const writeProg=programs.find(p=>p.id==='write');
@@ -785,7 +797,7 @@ function renderMetrics(){
   const artDots=artCFK.map(c=>{const s=getS(c.id);return djDot((c.artBuild||s.done)?'done':s.grade==='IP'?'inprog':c.semester&&c.semester.includes('TBD')?'tbd':'plan');}).join('');
 
   // Electives
-  const elecIds=['aa4','aa6','aa12','aa15','aa17','aa18','aa27','aa28','aa31','aa31L','aa33','pa1','pa2','pa3','pa5','pa7'];
+  const elecIds=['aa12','aa18','aa27','aa4','aa28','aa15','aa17','aa6']; // AST1002,SLS2930,CGS1100,ARH1000,SLS1102,POS1041,DEP2004,CRW2100
   const elecDone=elecIds.filter(id=>getS(id).done).length;
   const elecTotal=elecIds.length;
   const elecPct=Math.round(elecDone/elecTotal*100);
@@ -805,16 +817,16 @@ function renderMetrics(){
         <div class="dash-aa-icon">🎓</div>
         <div class="dash-aa-content">
           <div class="dash-aa-title">AA Degree — College of the Florida Keys</div>
-          <div class="dash-aa-sub">All journeys below feed into this goal · Target: 60 credits · Tap to explore</div>
+          <div class="dash-aa-sub">${aaC} credits earned ✓ · Working toward 60 · Tap to explore</div>
           <div class="dash-aa-bar-wrap"><div class="dash-aa-bar" style="width:${aaPct}%"></div></div>
           <div class="dash-aa-stats"><span>${aaC} of 60 credits earned so far</span><span>${aaPct}% complete</span></div>
           <div class="dash-aa-feeds">
             <span class="dash-aa-feed">✍️ Writing</span>
             <span class="dash-aa-feed">🔢 Math</span>
             <span class="dash-aa-feed">🔬 Science</span>
-            <span class="dash-aa-feed">🎨 Art</span>
             <span class="dash-aa-feed">📚 Electives</span>
             <span class="dash-aa-feed">💉 Phlebotomy (VR)</span>
+
           </div>
         </div>
       </div>
@@ -841,19 +853,13 @@ function renderMetrics(){
         <div class="dj-bar-wrap"><div class="dj-bar" style="width:${sPct}%;background:#1D9E75"></div></div>
         <div class="dj-status">${sPct===100?'✓ Complete! 🎉':sDone>0?`${sPct}% — building your foundation 🌿`:'Starting Fall 2026 🔬'}</div>
       </div>
-      <div class="dash-journey" onclick="navTo('art')" role="button" tabindex="0">
-        <div class="dj-top"><span class="dj-icon">🎨</span><span class="dj-pct" style="color:#9D174D">${artDone}/${artCFK.length}</span></div>
-        <div class="dj-label">Art Journey</div>
-        <div class="dj-steps">${artDots}</div>
-        <div class="dj-bar-wrap"><div class="dj-bar" style="width:${artPct}%;background:#FFB8C6"></div></div>
-        <div class="dj-status">${artPct===100?'✓ Complete! 🎉':artDone>0?`${artPct}% — your creativity shines 🎨`:'Journey started Spring 2026 🏺'}</div>
-      </div>
+
       <div class="dash-journey dash-elec" onclick="navTo('aa')" role="button" tabindex="0">
         <div class="dj-top"><span class="dj-icon">📚</span><span class="dj-pct" style="color:#C2410C">${elecDone}/${elecTotal}</span></div>
-        <div class="dj-label">Electives & Areas</div>
+        <div class="dj-label">General Ed & Electives</div>
         <div class="dj-steps">${elecDots}</div>
         <div class="dj-bar-wrap"><div class="dj-bar" style="width:${elecPct}%;background:#F97316"></div></div>
-        <div class="dj-status">${elecPct===100?'✓ Complete! 🎉':elecDone>0?`${elecPct}% — filling the AA areas 📚`:'Astronomy ✓ Career Seminar ✓ · SLS courses transfer to FSU as electives 🎓'}</div>
+        <div class="dj-status">${elecPct===100?'✓ Complete! 🎉':elecDone>0?`${elecPct}% — filling the AA areas 📚`:'Astronomy ✓ Career Seminar ✓ · CGS 1100 ✓'}</div>
       </div>
       <div class="dash-journey dash-phle" onclick="navTo('phle')" role="button" tabindex="0">
         <div class="dj-top"><span class="dj-icon">💉</span><span class="dj-pct" style="color:#065F46">${getS('ph1').done&&getS('ph2').done?'2/2':getS('ph1').done?'1/2':'0/2'}</span></div>
@@ -1311,7 +1317,7 @@ function renderMathPathway(){
   mathSeqA.forEach(c=>{h+=mathTile(c);});
   h+=`</div>`;
 
-  h+=`<div style="font-size:12px;font-weight:700;color:#7C3AED;text-align:center;padding:.75rem;background:var(--lav);border-radius:var(--rsm);margin-top:.5rem">🏛️ Calculus III and Differential Equations continue at FSU after transfer</div>`;
+  h+=`<div style="font-size:12px;font-weight:700;color:#7C3AED;text-align:center;padding:.75rem;background:var(--lav);border-radius:var(--rsm);margin-top:.5rem">🏛️ Calculus II, Calculus III and Differential Equations continue at FSU after transfer</div>`;
   h+=`</div>`;
   return h;
 }
@@ -1470,11 +1476,8 @@ function renderJourneyMap(){
       steps:[
         {emoji:'🫀',id:'s1',title:'BSC 1085 — A&P I'},
         {emoji:'🫀',id:'s2',title:'BSC 1086 — A&P II'},
-        {emoji:'🧬',id:'s3',title:'BSC 1010 — Biology I'},
         {emoji:'⚗️',id:'s5',title:'CHM 1045 — Gen Chem I'},
         {emoji:'🧪',id:'s6',title:'CHM 1046 — Gen Chem II'},
-        {emoji:'🧬',id:'s4',title:'BSC 1011 — Biology II'},
-        {emoji:'🧬',id:'s7',title:'BSC 2010 — Bio Science I'},
       ]
     },
     {
@@ -1565,11 +1568,14 @@ function render(){
 
   /* ══ PHASE 2 — CFK AA + PREREQS ══ */
   const cfkEl=document.getElementById('inst-cfk');
+  // Use same credit calculation as dashboard — completed courses only (no IP)
   let aaC=0;
   programs.find(p=>p.id==='aa').areas.forEach(a=>a.courses.forEach(c=>{
-    const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));
+    const s=getS(c.id);if(earnedCr(s,c)) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));
   }));
-  mathSeq.forEach(c=>{if(!c.devEd){const s=getS(c.id);if(s.done) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  mathSeqA.forEach(c=>{if(!c.devEd&&(c.credits||0)>0){const s=getS(c.id);if(earnedCr(s,c)) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  sciSeqA.forEach(c=>{if((c.credits||0)>0){const s=getS(c.id);if(earnedCr(s,c)) aaC+=Number(s.credits!=null?s.credits:(c.credits||0));}});
+  [{id:'pa1',cr:2},{id:'pa2',cr:2},{id:'pa3',cr:2},{id:'pa4',cr:1},{id:'pa5',cr:2},{id:'pa7',cr:2}].forEach(({id,cr})=>{aaC+=earnedCrById(id,cr);});
   aaC=Math.min(60,aaC);
   const aaPct=Math.min(100,Math.round(aaC/60*100));
   const flagEl=document.getElementById('credit-flag-banner');
@@ -1582,7 +1588,7 @@ function render(){
   cfkEl.innerHTML+=instBanner(
     'active','🎓',
     'CFK — AA Degree & Transfer Prerequisites',
-    'College of the Florida Keys &nbsp;·&nbsp; Earning the AA and preparing to transfer to FSU Chemical Engineering',
+    'College of the Florida Keys &nbsp;·&nbsp; Earning the AA and preparing to transfer to FSU Biomedical Engineering',
     'In Progress',
     'ib-now',
     `<div class="inst-progress">
@@ -1601,7 +1607,7 @@ function render(){
     </div>`
   );
   // Render all CFK sections except tx separately
-  ['write','art','sci','math','aa','cfkart','phle','pa','certs'].forEach(pid=>{const s=buildSection(pid);if(s)cfkEl.appendChild(s);});
+  ['write','sci','math','aa','phle','pa','certs'].forEach(pid=>{const s=buildSection(pid);if(s)cfkEl.appendChild(s);});
 
   // Project ACCESS & Certifications — collapsible at bottom of CFK
   const paBottomCollapsed=state['pa_bottom_collapsed']===true;
